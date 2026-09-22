@@ -18,8 +18,8 @@ int main() {
   Graphic::Camera main_camera(Math::Vector2D { 0.0f, 0.0f }, Math::Vector2D { 400.0f, 300.0f }, 1.0f);
   Graphic::Scene main_scene(main_screen);
 
-  Graphic::Texture red_valve_bg("assets/textures/red_valve.png");
-  Graphic::Canvas red_valve_screen(Math::Vector2D { 118.0f, 322.0f }, 60, 60, Graphic::Colors::White, red_valve_bg);
+  Graphic::Texture red_valve_tex("assets/textures/red_valve.png");
+  Graphic::Canvas red_valve_screen(Math::Vector2D { 118.0f, 322.0f }, 60, 60, Graphic::Colors::White, red_valve_tex);
   Graphic::Camera red_valve_camera(Math::Vector2D { 118.0f + 30.0f, 322.0f + 30.0f }, Math::Vector2D { 118.0f + 30.0f, 322.0f + 30.0f });
   Graphic::Scene red_valve_scene(red_valve_screen);
 

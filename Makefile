@@ -14,7 +14,7 @@ LDFLAGS = -isystem /opt/homebrew/include -L/opt/homebrew/lib -lraylib \
 
 COMMON_INCLUDES = -I./include
 
-COMMON_FILES = src/Colors.cpp src/Adapter.cpp src/Scene.cpp src/Canvas.cpp src/LightManager.cpp src/Camera.cpp src/Button.cpp
+COMMON_FILES = src/Colors.cpp src/Adapter.cpp src/Canvas.cpp src/Scene.cpp src/Camera.cpp src/Button.cpp
 GAME_OBJECTS = src/Valve.cpp
 
 WORK_DIR = ./work

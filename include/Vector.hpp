@@ -5,6 +5,7 @@
 #include <cmath>
 #include <array>
 #include <optional>
+#include <cassert>
 #include <raylib.h>
 
 namespace Math {
@@ -81,14 +82,16 @@ public:
 
     std::optional<T> operator[](const size_t i) const;
 
-    Vector<T, N>     operator + (const Vector<T, N>& other);
-    Vector<T, N>     operator - (const Vector<T, N>& other);
-    Vector<T, N>     operator * (T factor);
-    T                operator ^ (const Vector<T, N>& other);
+    Vector<T, N>     operator + (const Vector<T, N>& other) const;
+    Vector<T, N>     operator - (const Vector<T, N>& other) const;
+    Vector<T, N>     operator * (T factor) const;
+    Vector<T, N>     operator / (T divider) const;
+    T                operator ^ (const Vector<T, N>& other) const;
 
     Vector<T, N>&    operator += (const Vector<T, N>& other);
     Vector<T, N>&    operator -= (const Vector<T, N>& other);
     Vector<T, N>&    operator *= (T factor);
+    Vector<T, N>&    operator /= (T divider);
 
     // -------------------------------------------------------------------------------
     // --- Implementation Of Operators ---
@@ -177,22 +180,28 @@ std::optional<T> Vector<T, N>::operator [] (const size_t i) const {
 }
 
 template <typename T, size_t N>
-Vector<T, N> Vector<T, N>::operator + (const Vector<T, N>& other) {
+Vector<T, N> Vector<T, N>::operator + (const Vector<T, N>& other) const {
     return this->add(other);
 }
 
 template <typename T, size_t N>
-Vector<T, N> Vector<T, N>::operator - (const Vector<T, N>& other) {
+Vector<T, N> Vector<T, N>::operator - (const Vector<T, N>& other) const {
     return this->sub(other);
 }
 
 template <typename T, size_t N>
-Vector<T, N> Vector<T, N>::operator * (T factor) {
+Vector<T, N> Vector<T, N>::operator * (T factor) const {
     return this->mul(factor);
 }
 
 template <typename T, size_t N>
-T Vector<T, N>::operator ^ (const Vector<T, N>& other) {
+Vector<T, N> Vector<T, N>::operator / (T divider) const {
+    return this->mul(static_cast<T>(1) / divider);
+}
+
+
+template <typename T, size_t N>
+T Vector<T, N>::operator ^ (const Vector<T, N>& other) const {
     return this->dot(other);
 }
 
@@ -218,6 +227,11 @@ Vector<T, N>& Vector<T, N>::operator *= (T factor) {
         this->data_[i] *= factor;
     }
     return *this;
+}
+
+template <typename T, size_t N>
+Vector<T, N>& Vector<T, N>::operator /= (T divider) {
+    return this->mul(static_cast<T>(1) / divider);
 }
 
 using Vector2D = Vector<float, 2>;

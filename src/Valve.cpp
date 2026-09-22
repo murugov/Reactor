@@ -11,14 +11,7 @@ void Valve::update(float dt) {
 }
 
 void Valve::draw() const {
-    float scale = 1.0f; 
-
-    float half_width  = (static_cast<float>(texture_.width())  * scale) / 2.0f;
-    float half_height = (static_cast<float>(texture_.height()) * scale) / 2.0f;
-
-    Math::Vector2D draw_pos { pos_.x() - half_width, pos_.y() - half_height };
-
-    Adapter::drawTexture(texture_, draw_pos, Colors::White, scale, rotation_angle_);
+    canvas_.draw(rotation_angle_);
 }
 
 }

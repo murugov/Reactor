@@ -1,5 +1,6 @@
 #include "Scene.hpp"
 #include "Adapter.hpp"
+#include "GameObject.hpp"
 
 namespace Graphic {
 
@@ -18,18 +19,39 @@ void Scene::unbind (const Camera& camera) const {
 }
 
 
-void Scene::add_object(Canvas obj) {
+void Scene::addObject(std::unique_ptr<Graphic::GameObject> obj) {
     objects_.push_back(std::move(obj));
 }
 
-void Scene::draw() const {
+void Scene::addLight (const Light& light) {
+    lights_.push_back(std::move(light));
+}
+
+void Scene::setAllObjects (bool state) {
+    for (auto& object : objects_) {
+        object->setEnabled(state);
+    }
+}
+
+void Scene::setAllLights (bool state) {
+    for (auto& light : lights_) {
+        light.enabled = state;
+    }
+}
+
+void Scene::draw () const {
     background_canvas_.draw();
     
     for (const auto& obj : objects_) {
-        obj.draw();
+        if (obj->isEnabled()) {
+            obj->draw();
+        }
     }
+}
 
-    // lightManager_.apply(); 
+void Scene::clear () {
+    objects_.clear();
+    lights_.clear();
 }
 
 }

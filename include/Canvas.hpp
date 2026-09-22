@@ -7,34 +7,23 @@
 
 namespace Graphic {
 
-struct BackGround {
-    Color color;
-    const Texture* texture = nullptr;
-};
-    
 class Canvas {
 private:
     Math::Vector2D pos_;
-    int width_;
-    int height_;
+    Math::Vector2D size_;
     float scale_;
-    BackGround bg_;
-
+    Color color_;
+    const Texture* texture_ = nullptr;          // NOTE: Maybe it needs to be a lvalue reference
+    
 public:
     // -------------------------------------------------------------------------------
     // --- Сonstructor ---
-    
-    Canvas(const Math::Vector2D& pos, int width, int height, BackGround bg, float scale = 1.0f)
-          : pos_(pos), width_(width), height_(height), scale_(scale), bg_(bg) {}
-  
-    Canvas(const Math::Vector2D& pos, int width, int height, Color color, float scale = 1.0f)
-          : pos_(pos), width_(width), height_(height), scale_(scale), bg_{color, nullptr} {}
 
-    Canvas(const Math::Vector2D& pos, int width, int height, Color color, const Texture& texture, float scale = 1.0f)
-          : pos_(pos), width_(width), height_(height), scale_(scale) {
-              bg_.color = color;
-              bg_.texture = &texture;
-          }
+    Canvas(const Math::Vector2D& pos, int width = 0, int height = 0, Color color = Colors::White, const Texture& texture = Texture())
+          : pos_(pos), size_{ static_cast<float>(width), static_cast<float>(height) }, scale_(1.0f), color_(color), texture_(&texture) {}
+          
+    Canvas(const Math::Vector2D& pos, int width = 0, int height = 0, float scale = 1.0f, Color color = Colors::White, const Texture& texture = Texture())
+          : pos_(pos), size_{ static_cast<float>(width), static_cast<float>(height) }, scale_(scale), color_(color), texture_(&texture) {}
 
     // --- Copy Semantics ---
     
@@ -51,19 +40,20 @@ public:
     // -------------------------------------------------------------------------------
     // --- Getters ---
     
-    Math::Vector2D pos()    const { return pos_; }
-    float          x()      const { return pos_.x(); }
-    float          y()      const { return pos_.y(); }
-    int            width()  const { return width_; }
-    int            height() const { return height_; }
-    float          scale()  const { return scale_; }
-    
-    const BackGround& background() const { return bg_; }
+    Math::Vector2D pos()     const { return pos_; }
+    float          x()       const { return pos_.x(); }
+    float          y()       const { return pos_.y(); }
+    Math::Vector2D size()    const { return size_; }
+    int            width()   const { return static_cast<int>(size_.x()); }
+    int            height()  const { return static_cast<int>(size_.y()); }
+    float          scale()   const { return scale_; }
+    Color          color()   const { return color_; }
+    const Texture* texture() const { return texture_; }
 
     // -------------------------------------------------------------------------------
     // --- Methods ---
     
-    void draw() const;
+    void draw (float rotation_angle = 0.0f) const;
 };
 
 }

@@ -1,6 +1,5 @@
 #include "Adapter.hpp"
 #include "Canvas.hpp"
-#include "LightManager.hpp"
 #include <raylib.h>
 
 namespace Graphic {
@@ -189,9 +188,7 @@ void Adapter::drawVector(const Canvas& canvas, const Math::Vector2D& pos, const 
     ::DrawLineEx(end_pos, ::Vector2 { end_pos.x + arrowhead2.x(), end_pos.y + arrowhead2.y() }, thick, color);
 }
 
-void Adapter::drawSphere (const Scene& scene, const Math::Sphere& sphere, Color color) {            // FIXME: Remove LightManager
-    LightManager light_manager = scene.lightManager();
-
+void Adapter::drawSphere (const Scene& scene, const Math::Sphere& sphere, Color color) {            // FIXME: Remove lights
     float center_x = sphere.x();
     float center_y = sphere.y();
     float radius   = sphere.radius();
@@ -203,7 +200,7 @@ void Adapter::drawSphere (const Scene& scene, const Math::Sphere& sphere, Color 
 
     float radius_sq = radius * radius;
 
-    const auto& lights = light_manager.lights(); 
+    const auto& lights = scene.lights(); 
     size_t num_lights = lights.size();
 
     for (int screen_y = y_min; screen_y <= y_max; ++screen_y) {

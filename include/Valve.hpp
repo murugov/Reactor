@@ -5,17 +5,19 @@
 namespace Graphic {
     
 class Valve : public GameObject {
-private:
-    const Texture& texture_;
-    Math::Vector2D pos_;
+private:    
     float rotation_angle_ = 0.0f;  // Local rotation angle
     float rotation_speed_ = 90.0f; // Velocity of rotation
 
 public:
     // -------------------------------------------------------------------------------
-    // --- Сonstructor ---
+    // --- Constructor ---
     
-    Valve(const Texture& texture, Math::Vector2D pos) : texture_(texture), pos_(pos) {}
+    Valve(Math::Vector2D pos, const Canvas& canvas) 
+        : GameObject(pos, canvas)
+    {
+        setPosition(pos);
+    }
 
     // --- Virtual Destructor ---
     
@@ -26,7 +28,6 @@ public:
     
     void update (float dt) override;
     void draw () const override;
-
 };
 
 }

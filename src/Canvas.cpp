@@ -1,22 +1,20 @@
 #include "Canvas.hpp"
 #include "Adapter.hpp"
+#include "Vector.hpp"
 
 namespace Graphic {
 
 // -------------------------------------------------------------------------------
 // --- Implementation Of Methods ---
     
-void Canvas::draw() const {
-    if (bg_.texture && bg_.texture->is_loaded()) {
-        Math::Vector2D centered_pos {
-            pos_.x() - (static_cast<float>(width_)  * scale_) / 2.0f,
-            pos_.y() - (static_cast<float>(height_) * scale_) / 2.0f
-        };
+void Canvas::draw(float rotation_angle) const {
+    if (texture_ && texture_->is_loaded()) {
+        Math::Vector2D centered_pos = pos_ - (size_ * scale_) / 2.0f;
 
-        Adapter::drawTexture(*bg_.texture, centered_pos, bg_.color, scale_, 0.0f);
+        Adapter::drawTexture (*texture_, centered_pos, color_, scale_, rotation_angle);
     } 
     else {
-        Adapter::drawRectangle(*this, pos_, { static_cast<float>(width_), static_cast<float>(height_) }, bg_.color);
+        Adapter::drawRectangle (*this, pos_, size_,color_);
     }
 }
 
