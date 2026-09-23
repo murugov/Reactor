@@ -3,9 +3,8 @@
 
 #include <string>
 #include <functional>
-#include "Adapter.hpp"
-#include "Vector.hpp"
-#include "Canvas.hpp"
+#include "Graphic/Canvas.hpp"
+#include "Math/Vector.hpp"
 
 namespace Graphic {
 

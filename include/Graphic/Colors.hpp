@@ -44,6 +44,6 @@ struct Colors {
     static const Color Magenta;
 };
 
-}
+} // namespace Graphic
 
 #endif

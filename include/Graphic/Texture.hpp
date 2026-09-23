@@ -1,14 +1,14 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
 
-#include <raylib.h>
 #include <string>
+#include <raylib.h>
 
 namespace Graphic {
 
 class Texture {
 private:
-    ::Texture2D raw_texture_{};
+    ::Texture2D raw_texture_ {};
     bool is_loaded_ = false;
 
 public:
@@ -17,16 +17,19 @@ public:
 
     Texture() = default;
 
+    // NOTE: RAII: Resource Acquisition Is Initialization
     explicit Texture(const std::string& file_path) {
         raw_texture_ = ::LoadTexture(file_path.c_str());
         is_loaded_ = static_cast<bool>(raw_texture_.id > 0);
     }
 
+    // --- Copy Semantics Disabled ---
+    
     // NOTE: Protection against double deletion in VRAM
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;
     
-    // --- Move Constructor ---
+    // --- Move Semantics ---
     
     Texture(Texture&& other) noexcept {
         raw_texture_ = other.raw_texture_;
@@ -35,8 +38,6 @@ public:
         other.raw_texture_ = ::Texture2D{};
         other.is_loaded_ = false;
     }
-
-    // --- Move Assignment Operator ---
 
     Texture& operator=(Texture&& other) noexcept {
         if (this != &other) {
@@ -70,7 +71,7 @@ public:
     // -------------------------------------------------------------------------------
     // --- Implementation Of Methods ---
     
-    void unload() {
+    void unload () {
         if (is_loaded_) {
             ::UnloadTexture(raw_texture_);
             is_loaded_ = false;
@@ -79,6 +80,6 @@ public:
     
 };
 
-}
+} // namespace Graphic
 
 #endif

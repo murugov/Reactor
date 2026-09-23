@@ -2,7 +2,7 @@
 #define CAMERA_HPP
 
 #include <raylib.h>
-#include "Vector.hpp"
+#include "Math/Vector.hpp"
 
 namespace Graphic {
 
@@ -48,6 +48,6 @@ public:
     void look_at (const Math::Vector2D& world_pos);
 };
 
-}
+} // namespace Graphic
 
 #endif

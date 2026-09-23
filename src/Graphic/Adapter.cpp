@@ -15,6 +15,9 @@ static void normalize3D (float& x, float& y, float& z) {
         z /= length;
     }
 }
+    
+// -------------------------------------------------------------------------------
+// --- Implementation Of Static Methods ---
 
 // -------------------------------------------------------------------------------
 // --- Window-related Functions ---
@@ -178,95 +181,25 @@ void Adapter::drawVector(const Canvas& canvas, const Math::Vector2D& pos, const 
 
     float arrowScale = 0.15f; 
 
-    Math::Vector2D vecBack { -vec.x() * arrowScale, -(-vec.y() * arrowScale) };
-    Math::Vector2D vecLeft { -vec.y() * arrowScale * 0.5f, -(vec.x() * arrowScale * 0.5f) };
+    Math::Vector2D vec_back { -vec.x() * arrowScale, -(-vec.y() * arrowScale) };
+    Math::Vector2D vec_left { -vec.y() * arrowScale * 0.5f, -(vec.x() * arrowScale * 0.5f) };
 
-    Math::Vector2D arrowhead1 = vecBack + vecLeft;
-    Math::Vector2D arrowhead2 = vecBack - vecLeft;
+    Math::Vector2D arrowhead1 = vec_back + vec_left;
+    Math::Vector2D arrowhead2 = vec_back - vec_left;
 
     ::DrawLineEx(end_pos, ::Vector2 { end_pos.x + arrowhead1.x(), end_pos.y + arrowhead1.y() }, thick, color);
     ::DrawLineEx(end_pos, ::Vector2 { end_pos.x + arrowhead2.x(), end_pos.y + arrowhead2.y() }, thick, color);
 }
 
-void Adapter::drawSphere (const Scene& scene, const Math::Sphere& sphere, Color color) {            // FIXME: Remove lights
-    float center_x = sphere.x();
-    float center_y = sphere.y();
-    float radius   = sphere.radius();
-
-    int x_min = static_cast<int>(std::floor(center_x - radius));
-    int x_max = static_cast<int>(std::ceil(center_x + radius));
-    int y_min = static_cast<int>(std::floor(center_y - radius));
-    int y_max = static_cast<int>(std::ceil(center_y + radius));
-
-    float radius_sq = radius * radius;
-
-    const auto& lights = scene.lights(); 
-    size_t num_lights = lights.size();
-
-    for (int screen_y = y_min; screen_y <= y_max; ++screen_y) {
-        for (int screen_x = x_min; screen_x <= x_max; ++screen_x) {
-            float dx = static_cast<float>(screen_x) - center_x;
-            float dy = static_cast<float>(screen_y) - center_y;
-            float distSq = dx * dx + dy * dy;
-
-            if (distSq > radius_sq) {
-                continue;
-            }
-
-            float dz = std::sqrt(radius_sq - distSq);
-
-            float nx = dx / radius;
-            float ny = dy / radius;
-            float nz = dz / radius;
-
-            float world_x = static_cast<float>(screen_x);
-            float world_y = static_cast<float>(screen_y);
-            float world_z = dz;
-        
-            float total_diffuse = 0.1f; 
-            float total_specular = 0.0f;
-
-            for (size_t i = 0; i < num_lights; ++i) {
-                if (lights[i].enabled) {
-                    float lx = (lights[i].pos).x() - world_x;
-                    float ly = (lights[i].pos).y() - world_y;
-                    float lz = (lights[i].pos).z() - world_z;
-                    normalize3D(lx, ly, lz);
-
-                    // Lambert
-                    float dotNL = std::max(0.0f, nx * lx + ny * ly + nz * lz);
-                    total_diffuse += 0.5f * dotNL; 
-
-                    // Phong
-                    float hx = lx;
-                    float hy = ly;
-                    float hz = lz + 1.0f; // L + V
-                    normalize3D(hx, hy, hz);
-
-                    float dotNH = std::max(0.0f, nx * hx + ny * hy + nz * hz);
-                    total_specular += std::pow(dotNH, 32.0f); 
-                }
-            }
-
-            float final_r = (static_cast<float>(color.r) * total_diffuse) + (255.0f * total_specular);
-            float final_g = (static_cast<float>(color.g) * total_diffuse) + (255.0f * total_specular);
-            float final_b = (static_cast<float>(color.b) * total_diffuse) + (255.0f * total_specular);
-
-            unsigned char r = static_cast<unsigned char>(std::min(255.0f, final_r));
-            unsigned char g = static_cast<unsigned char>(std::min(255.0f, final_g));
-            unsigned char b = static_cast<unsigned char>(std::min(255.0f, final_b));
-            Color pixel_color = { r, g, b, color.a };
-
-            Adapter::drawPixel(scene.background(), Math::Vector2D{static_cast<float>(screen_x), static_cast<float>(screen_y) }, pixel_color);   // FIXME: scene.background() is not the same as scene.canvas()
-        }
-    }
-}
-
 // -------------------------------------------------------------------------------
 // --- Texture Drawing Functions ---
 
-void Adapter::drawTexture (const Texture& texture, Math::Vector2D pos, Color color, float scale, float rotation) {
-    ::DrawTextureEx(texture.get_raw(), ::Vector2 { pos.x(), pos.y() }, rotation, scale, color);
+void Adapter::drawTexture (const Canvas& canvas, const Texture& texture, Math::Vector2D pos, Color color, float scale, float rotation) {
+    ::Vector2 pos_rl { canvas.x() + pos.x() * canvas.scale(), canvas.y() + pos.y() * canvas.scale() };
+    
+    float final_scale = scale * canvas.scale();
+
+    ::DrawTextureEx(texture.get_raw(), pos_rl, rotation, final_scale, color);
 }
 
 // -------------------------------------------------------------------------------

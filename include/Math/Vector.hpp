@@ -6,14 +6,13 @@
 #include <array>
 #include <optional>
 #include <cassert>
-#include <raylib.h>
 
 namespace Math {
 
 template <typename T, size_t N>
 class Vector {
 private:
-    std::array<T, N> data_{};
+    std::array<T, N> data_ {};
     
 public:
     // -------------------------------------------------------------------------------
@@ -29,20 +28,14 @@ public:
         }
     }
        
-    // --- Copy Constructor ---
+    // --- Copy Semantics ---
 
     Vector(const Vector<T, N>& other) = default;
+    Vector<T, N>& operator=(const Vector<T, N>& other) = default;    
 
-    // --- Move Constructor ---
+    // --- Move Semantics ---
 
     Vector(Vector<T, N>&& other) noexcept = default;
-
-    // --- Copy Assignment Operator ---
-
-    Vector<T, N>& operator=(const Vector<T, N>& other) = default;
-
-    // --- Move Assignment Operator ---
-    
     Vector<T, N>& operator=(Vector<T, N>&& other) noexcept = default;
 
     // --- Destructor ---
@@ -238,6 +231,6 @@ using Vector2D = Vector<float, 2>;
 using Vector3D = Vector<float, 3>;
 using Vector4D = Vector<float, 4>;
 
-}
+} // namespace Math
 
 #endif
