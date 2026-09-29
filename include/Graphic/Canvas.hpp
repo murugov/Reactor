@@ -42,9 +42,9 @@ public:
     // -------------------------------------------------------------------------------
     // --- Getters ---
     
-    Math::Vector2D pos()     const { return transform_.position; }
-    float          x()       const { return transform_.position.x(); }
-    float          y()       const { return transform_.position.y(); }
+    Math::Vector2D pos()     const { return transform_.pos; }
+    float          x()       const { return transform_.pos.x(); }
+    float          y()       const { return transform_.pos.y(); }
     Math::Vector2D size()    const { return transform_.size; }
     int            width()   const { return static_cast<int>(transform_.size.x()); }
     int            height()  const { return static_cast<int>(transform_.size.y()); }
@@ -55,7 +55,7 @@ public:
     // -------------------------------------------------------------------------------
     // --- Methods Prototypes ---
     
-    void draw(float rotation_angle = 0.0f) const;
+    void draw() const;  // TODO: Add "float rotation_angle = 0.0f"
 };
 
 } // namespace Graphic

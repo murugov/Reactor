@@ -10,13 +10,14 @@ namespace Core {
 
 struct Light {
     Math::Vector3D pos;
-    bool enabled = true;
     Color color = Graphic::Colors::White;
+    bool enabled = true;
 };
 
+// NOTE: Ideally, we should put the light sources in a separate class and accurately implement the apply method for lights_
 class LightManager {
 private:
-    std::vector<Light> lights_{};
+    std::vector<Light> lights_ {};
 
 public:
     // -------------------------------------------------------------------------------
@@ -36,10 +37,9 @@ public:
     // -------------------------------------------------------------------------------
     // --- Methods Prototypes ---
 
-    void   addLight (const Math::Vector3D& pos, Graphic::Color color = Graphic::Colors::White);
-    void   clear ();
-    void   setAllEnabled (bool state);
-    Light& getLightRef(size_t index);
+    void addLight (const Light& light);
+    void setAllEnabled (bool state);
+    void clear ();
 };
 
 } // namespace Core

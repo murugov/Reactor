@@ -1,41 +1,30 @@
-#include "Scene.hpp"
-#include "Adapter.hpp"
-#include "GameObject.hpp"
+#include "Core/Scene.hpp"
+#include "Core/GameObject.hpp"
+#include "Graphic/Adapter.hpp"
 
-namespace Graphic {
+namespace Core {
 
 // -------------------------------------------------------------------------------
 // --- Implementation Of Methods ---
 
-void Scene::bind (const Camera& camera) const {
+void Scene::bind (const Graphic::Camera& camera) const {
     // NOTE: Begin scissor mode (define screen area for following drawing)
-    Adapter::beginScissorMode(static_cast<int>((background_canvas_.pos()).x()), static_cast<int>((background_canvas_.pos()).y()), background_canvas_.width(), background_canvas_.height());
     camera.begin();
+    Graphic::Adapter::beginScissorMode({ background_canvas_.pos(), background_canvas_.size() });
 }
 
-void Scene::unbind (const Camera& camera) const {
+void Scene::unbind (const Graphic::Camera& camera) const {
+    Graphic::Adapter::endScissorMode();
     camera.end();
-    Adapter::endScissorMode();
 }
 
-
-void Scene::addObject(std::unique_ptr<Graphic::GameObject> obj) {
+void Scene::addObject(std::unique_ptr<GameObject> obj) {
     objects_.push_back(std::move(obj));
-}
-
-void Scene::addLight (const Light& light) {
-    lights_.push_back(std::move(light));
 }
 
 void Scene::setAllObjects (bool state) {
     for (auto& object : objects_) {
         object->setEnabled(state);
-    }
-}
-
-void Scene::setAllLights (bool state) {
-    for (auto& light : lights_) {
-        light.enabled = state;
     }
 }
 
@@ -51,7 +40,7 @@ void Scene::draw () const {
 
 void Scene::clear () {
     objects_.clear();
-    lights_.clear();
+    light_manager_.clear();
 }
 
-}
+} // namespace Core

@@ -1,4 +1,4 @@
-#include "Colors.hpp"
+#include "Graphic/Colors.hpp"
 
 namespace Graphic {
 

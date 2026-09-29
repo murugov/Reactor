@@ -67,7 +67,7 @@
     "output": "./work/build/react_program"
   },
   {
-    "file": "src/Colors.cpp",
+    "file": "src/Core/LightManager.cpp",
     "arguments": [
       "/usr/bin/clang++",
       "-o",
@@ -128,13 +128,13 @@
       "-isystem",
       "/opt/homebrew/include",
       "-I./include",
-      "src/Colors.cpp"
+      "src/Core/LightManager.cpp"
     ],
     "directory": "/Users/murugov2007/Desktop/Projects/2nd_year/REACTOR",
     "output": "./work/build/react_program"
   },
   {
-    "file": "src/Adapter.cpp",
+    "file": "src/Core/Scene.cpp",
     "arguments": [
       "/usr/bin/clang++",
       "-o",
@@ -195,13 +195,13 @@
       "-isystem",
       "/opt/homebrew/include",
       "-I./include",
-      "src/Adapter.cpp"
+      "src/Core/Scene.cpp"
     ],
     "directory": "/Users/murugov2007/Desktop/Projects/2nd_year/REACTOR",
     "output": "./work/build/react_program"
   },
   {
-    "file": "src/Scene.cpp",
+    "file": "src/Gameplay/Valve.cpp",
     "arguments": [
       "/usr/bin/clang++",
       "-o",
@@ -262,13 +262,13 @@
       "-isystem",
       "/opt/homebrew/include",
       "-I./include",
-      "src/Scene.cpp"
+      "src/Gameplay/Valve.cpp"
     ],
     "directory": "/Users/murugov2007/Desktop/Projects/2nd_year/REACTOR",
     "output": "./work/build/react_program"
   },
   {
-    "file": "src/LightManager.cpp",
+    "file": "src/Graphic/Adapter.cpp",
     "arguments": [
       "/usr/bin/clang++",
       "-o",
@@ -329,13 +329,13 @@
       "-isystem",
       "/opt/homebrew/include",
       "-I./include",
-      "src/LightManager.cpp"
+      "src/Graphic/Adapter.cpp"
     ],
     "directory": "/Users/murugov2007/Desktop/Projects/2nd_year/REACTOR",
     "output": "./work/build/react_program"
   },
   {
-    "file": "src/Camera.cpp",
+    "file": "src/Graphic/Camera.cpp",
     "arguments": [
       "/usr/bin/clang++",
       "-o",
@@ -396,13 +396,13 @@
       "-isystem",
       "/opt/homebrew/include",
       "-I./include",
-      "src/Camera.cpp"
+      "src/Graphic/Camera.cpp"
     ],
     "directory": "/Users/murugov2007/Desktop/Projects/2nd_year/REACTOR",
     "output": "./work/build/react_program"
   },
   {
-    "file": "src/Sphere.cpp",
+    "file": "src/Graphic/Canvas.cpp",
     "arguments": [
       "/usr/bin/clang++",
       "-o",
@@ -463,13 +463,13 @@
       "-isystem",
       "/opt/homebrew/include",
       "-I./include",
-      "src/Sphere.cpp"
+      "src/Graphic/Canvas.cpp"
     ],
     "directory": "/Users/murugov2007/Desktop/Projects/2nd_year/REACTOR",
     "output": "./work/build/react_program"
   },
   {
-    "file": "src/Button.cpp",
+    "file": "src/Graphic/Colors.cpp",
     "arguments": [
       "/usr/bin/clang++",
       "-o",
@@ -530,7 +530,74 @@
       "-isystem",
       "/opt/homebrew/include",
       "-I./include",
-      "src/Button.cpp"
+      "src/Graphic/Colors.cpp"
+    ],
+    "directory": "/Users/murugov2007/Desktop/Projects/2nd_year/REACTOR",
+    "output": "./work/build/react_program"
+  },
+  {
+    "file": "src/Graphic/SpriteMaterial.cpp",
+    "arguments": [
+      "/usr/bin/clang++",
+      "-o",
+      "./work/build/react_program",
+      "-DDEBUG",
+      "-D_DEBUG",
+      "-ggdb3",
+      "-std=c++17",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Weffc++",
+      "-Wc++14-compat",
+      "-Wmissing-declarations",
+      "-Wcast-align",
+      "-Wcast-qual",
+      "-Wchar-subscripts",
+      "-Wconversion",
+      "-Wctor-dtor-privacy",
+      "-Wempty-body",
+      "-Wfloat-equal",
+      "-Wformat-nonliteral",
+      "-Wformat-security",
+      "-Wformat-signedness",
+      "-Wformat=2",
+      "-Winline",
+      "-Wnon-virtual-dtor",
+      "-Woverloaded-virtual",
+      "-Wpacked",
+      "-Wpointer-arith",
+      "-Winit-self",
+      "-Wredundant-decls",
+      "-Wshadow",
+      "-Wsign-conversion",
+      "-Wsign-promo",
+      "-Wstrict-overflow=2",
+      "-Wsuggest-override",
+      "-Wswitch-default",
+      "-Wswitch-enum",
+      "-Wundef",
+      "-Wunreachable-code",
+      "-Wunused",
+      "-Wvariadic-macros",
+      "-Wno-missing-field-initializers",
+      "-Wno-narrowing",
+      "-Wno-old-style-cast",
+      "-Wno-varargs",
+      "-Wstack-protector",
+      "-fcheck-new",
+      "-fsized-deallocation",
+      "-fstack-protector",
+      "-fstrict-overflow",
+      "-fno-omit-frame-pointer",
+      "-Wlarger-than=8192",
+      "-fPIE",
+      "-Werror=vla",
+      "-fsanitize=address,undefined,float-divide-by-zero,integer-divide-by-zero,vptr",
+      "-isystem",
+      "/opt/homebrew/include",
+      "-I./include",
+      "src/Graphic/SpriteMaterial.cpp"
     ],
     "directory": "/Users/murugov2007/Desktop/Projects/2nd_year/REACTOR",
     "output": "./work/build/react_program"

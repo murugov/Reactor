@@ -1,4 +1,4 @@
-#include "Camera.hpp"
+#include "Graphic/Camera.hpp"
 
 namespace Graphic {
 

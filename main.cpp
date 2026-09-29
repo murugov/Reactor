@@ -1,41 +1,30 @@
-#include "Adapter.hpp"
-#include "Camera.hpp"
-#include "Texture.hpp"
-#include "Vector.hpp"
-#include "Scene.hpp"
+#include "Core/Scene.hpp"
+#include "Graphic/Adapter.hpp"
+#include "Graphic/Camera.hpp"
+#include "Math/Vector.hpp"
 
-// TODO: (MolecularManager == controler) = true
-
-// NOTE: Obviously hardcoded main for test
 int main() {
-  const int window_width  = 800;
-  const int window_height = 450;
+    const int window_width  = 800;
+    const int window_height = 450;
 
-  Graphic::Adapter::initWindow(window_width, window_height, "Reactor");
+    Graphic::Adapter::initWindow(window_width, window_height, "Reactor");
+    
+    Graphic::Camera main_camera(Math::Vector2D { 0.0f, 0.0f }, Math::Vector2D { 0.0f, 0.0f }, 1.0f);
+    
+    Core::Scene main_scene({ 0.0f, 0.0f }, window_width, window_height, "assets/textures/reactor.png");
 
-  Graphic::Texture main_bg("assets/textures/reactor.png");
-  Graphic::Canvas main_screen(Math::Vector2D { 0.0f, 0.0f }, 800, 450, Graphic::Colors::White, main_bg);
-  Graphic::Camera main_camera(Math::Vector2D { 0.0f, 0.0f }, Math::Vector2D { 400.0f, 300.0f }, 1.0f);
-  Graphic::Scene main_scene(main_screen);
-
-  Graphic::Texture red_valve_tex("assets/textures/red_valve.png");
-  Graphic::Canvas red_valve_screen(Math::Vector2D { 118.0f, 322.0f }, 60, 60, Graphic::Colors::White, red_valve_tex);
-  Graphic::Camera red_valve_camera(Math::Vector2D { 118.0f + 30.0f, 322.0f + 30.0f }, Math::Vector2D { 118.0f + 30.0f, 322.0f + 30.0f });
-  Graphic::Scene red_valve_scene(red_valve_screen);
-
-  int angle = 0;
+    while (!Graphic::Adapter::shouldClose()) {
+        Graphic::Adapter::beginDrawing();
+                        
+            main_scene.bind(main_camera);
+                
+                main_scene.draw(); 
+                
+            main_scene.unbind(main_camera);
+            
+        Graphic::Adapter::endDrawing();
+    }
   
-  while (!Graphic::Adapter::shouldClose()) {
-      Graphic::Adapter::beginDrawing();
-        main_screen.draw();
-        red_valve_camera.begin();
-            red_valve_camera.set_rotation(static_cast<float>(angle % 360));
-            red_valve_screen.draw();
-        red_valve_camera.end();
-        
-      Graphic::Adapter::endDrawing();
-      angle++;
-  }
-  
-  Graphic::Adapter::closeWindow();
+    Graphic::Adapter::closeWindow();
+    return 0;
 }

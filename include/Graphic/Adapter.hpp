@@ -4,17 +4,13 @@
 #include <string>
 #include <raylib.h>
 #include "Graphic/Colors.hpp"
+#include "Graphic/Texture.hpp"
+#include "Math/Geometry.hpp"
+#include "Math/Transform.hpp"
 #include "Math/Vector.hpp"
 
 namespace Graphic {
 
-// NOTE: It is not currently in use, but it is expected to find an application.
-struct Rectangle {
-    Math::Vector2D pos;
-    Math::Vector2D size;
-};
-
-// FIXME: Add Math::Vector2D/(float, float) overload
 class Adapter {
 public:
     // -------------------------------------------------------------------------------
@@ -42,7 +38,7 @@ public:
     static void beginDrawing     ();
     static void endDrawing       ();
     static void clearBackground  (Color color);
-    static void beginScissorMode (int x, int y, int width, int height);
+    static void beginScissorMode (const Math::Transform2D& transform);
     static void endScissorMode   (); 
 
     // -------------------------------------------------------------------------------
@@ -71,15 +67,15 @@ public:
 
     static void drawPixel     (const Math::Vector2D& pos, Color color);
     static void drawLine      (const Math::Vector2D& start_pos, const Math::Vector2D& end_pos, Color color, float thick = 1.0f);
-    static void drawCircle    (const Math::Vector2D& center, float radius, Color color);
-    static void drawRectangle (const Math::Vector2D& pos, const Math::Vector2D& size, Color color);
-    static void drawTriangle  (const Math::Vector2D& v1, const Math::Vector2D& v2, const Math::Vector2D& v3, Color color);
-    static void drawVector    (const Math::Vector2D& pos, const Math::Vector2D& vec, Color color, float thick);
+    static void drawCircle    (const Math::Circle& circle, Color color);
+    static void drawRectangle (const Math::Rectangle& rect, Color color);
+    static void drawTriangle  (const Math::Triangle& triangle, Color color);
+    static void drawVector    (const Math::Transform2D& transform, Color color, float thick = 1.0f);
 
     // -------------------------------------------------------------------------------
     // --- Texture Drawing Functions ---
 
-    static void drawTexture (const Texture& texture, Math::Vector2D pos, Color color, float scale = 1.0f, float rotation = 0.0f);
+    static void drawTexture (const Texture& texture, const Math::Transform2D& transform, Color color);
 
     // -------------------------------------------------------------------------------
     // --- Text Drawing Functions ---

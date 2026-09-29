@@ -1,21 +1,8 @@
-#include "Adapter.hpp"
-#include "Canvas.hpp"
-#include <raylib.h>
+#include "Graphic/Adapter.hpp"
+#include "Math/Transform.hpp"
 
 namespace Graphic {
 
-// -------------------------------------------------------------------------------
-// --- Helper Functions ---
-
-static void normalize3D (float& x, float& y, float& z) {
-    float length = std::sqrt(x * x + y * y + z * z);
-    if (length > 0.0f) {
-        x /= length;
-        y /= length;
-        z /= length;
-    }
-}
-    
 // -------------------------------------------------------------------------------
 // --- Implementation Of Static Methods ---
 
@@ -60,8 +47,9 @@ void Adapter::clearBackground (Color color) {
     ::ClearBackground(color);
 }
 
-void Adapter::beginScissorMode (int x, int y, int width, int height) {
-    ::BeginScissorMode(x, y, width, height);
+void Adapter::beginScissorMode (const Math::Transform2D& transform) {
+    ::BeginScissorMode(static_cast<int>(transform.pos.x()),  -static_cast<int>(transform.pos.y()),
+                       static_cast<int>(transform.size.x()), -static_cast<int>(transform.size.y()));
 }
 
 void Adapter::endScissorMode () {
@@ -126,52 +114,34 @@ Math::Vector2D Adapter::getMousePosition(void) {
 // -------------------------------------------------------------------------------
 // --- Basic Shapes Drawing Functions ---
 
-void Adapter::drawPixel (const Canvas& canvas, const Math::Vector2D& pos, Color color) {
-    
-    ::Vector2 pos_rl { canvas.x() + pos.x() * canvas.scale(), canvas.y() - pos.y() * canvas.scale() };
-
-    ::DrawPixelV(pos_rl, color);
+void Adapter::drawPixel (const Math::Vector2D& pos, Color color) {
+    ::DrawPixelV({ pos.x(), -pos.y() }, color);
 }
 
-void Adapter::drawLine (const Canvas& canvas, const Math::Vector2D& start_pos, const Math::Vector2D& end_pos, Color color, float thick) {
-
-    ::Vector2 start_pos_rl { canvas.x() + start_pos.x() * canvas.scale(), canvas.y() - start_pos.y() * canvas.scale() };
-    ::Vector2 end_pos_rl   { canvas.x() + end_pos.x() * canvas.scale(), canvas.y() - end_pos.y() * canvas.scale() };
-
-    ::DrawLineEx(start_pos_rl, end_pos_rl, thick, color);
+void Adapter::drawLine (const Math::Vector2D& start_pos, const Math::Vector2D& end_pos, Color color, float thick) {
+    ::DrawLineEx({ start_pos.x(), -start_pos.y() }, { end_pos.x(), -end_pos.y() }, thick, color);
 }
 
-void Adapter::drawCircle (const Canvas& canvas, const Math::Vector2D& center, float radius, Color color) {
-    
-    ::Vector2 center_rl { canvas.x() + center.x() * canvas.scale(), canvas.y() - center.y() * canvas.scale() };
-
-    ::DrawCircleV(center_rl, radius, color);
+void Adapter::drawCircle (const Math::Circle& circle, Color color) {
+    ::DrawCircleV({ circle.pos.x(), -circle.pos.y() }, circle.radius, color);
 }
 
-void Adapter::drawRectangle (const Canvas& canvas, const Math::Vector2D& pos, const Math::Vector2D& size, Color color) {
-    
-    ::Vector2 pos_rl  { canvas.x() + pos.x() * canvas.scale(), canvas.y() + pos.y() * canvas.scale() };
-    ::Vector2 size_rl { size.x() * canvas.scale(), size.y() * canvas.scale() };
-
-    ::DrawRectangleV(pos_rl, size_rl, color);
+void Adapter::drawRectangle (const Math::Rectangle& rect, Color color) {
+    ::DrawRectangleV({ rect.pos.x(), -rect.pos.y() }, { rect.size.x(), -rect.size.y() }, color);
 } 
 
-void Adapter::drawTriangle (const Canvas& canvas, const Math::Vector2D& v1, const Math::Vector2D& v2, const Math::Vector2D& v3, Color color) {
-    
-    ::Vector2 v1_rl { canvas.x() + v1.x() * canvas.scale(), canvas.y() - v1.y() * canvas.scale() };
-    ::Vector2 v2_rl { canvas.x() + v2.x() * canvas.scale(), canvas.y() - v2.y() * canvas.scale() };
-    ::Vector2 v3_rl { canvas.x() + v3.x() * canvas.scale(), canvas.y() - v3.y() * canvas.scale() };
-
-    ::DrawTriangle(v1_rl, v2_rl, v3_rl, color);
+void Adapter::drawTriangle (const Math::Triangle& triangle, Color color) {
+    ::DrawTriangle({ triangle.v1.x(), -triangle.v1.y() },
+                   { triangle.v2.x(), -triangle.v2.y() },
+                   { triangle.v3.x(), -triangle.v3.y() }, color);
 }
 
-void Adapter::drawVector(const Canvas& canvas, const Math::Vector2D& pos, const Math::Vector2D& vec, Color color, float thick) {
-        
-    float screen_x = canvas.x() + static_cast<float>(pos.x()) * canvas.scale();
-    float screen_y = canvas.y() + static_cast<float>(pos.y()) * canvas.scale();
-
-    ::Vector2 start_pos { screen_x, -screen_y };
-    ::Vector2 end_pos   { screen_x + vec.x(), -(screen_y + vec.y()) };
+void Adapter::drawVector(const Math::Transform2D& transform, Color color, float thick) {
+    Math::Vector2D pos = transform.pos;
+    Math::Vector2D vec = transform.size;
+    
+    ::Vector2 start_pos { pos.x(), -pos.y() };
+    ::Vector2 end_pos   { pos.x() + vec.x(), -(pos.y() + vec.y()) };
 
     ::DrawLineEx(start_pos, end_pos, thick, color);
     
@@ -179,47 +149,40 @@ void Adapter::drawVector(const Canvas& canvas, const Math::Vector2D& pos, const 
         return;
     }
 
-    float arrowScale = 0.15f; 
+    float arrow_scale = 0.15f; 
 
-    Math::Vector2D vec_back { -vec.x() * arrowScale, -(-vec.y() * arrowScale) };
-    Math::Vector2D vec_left { -vec.y() * arrowScale * 0.5f, -(vec.x() * arrowScale * 0.5f) };
+    Math::Vector2D vec_back { -vec.x() * arrow_scale, -(-vec.y() * arrow_scale) };
+    Math::Vector2D vec_left { -vec.y() * arrow_scale * 0.5f, -(vec.x() * arrow_scale * 0.5f) };
 
-    Math::Vector2D arrowhead1 = vec_back + vec_left;
-    Math::Vector2D arrowhead2 = vec_back - vec_left;
+    Math::Vector2D arrowhead_1 = vec_back + vec_left;
+    Math::Vector2D arrowhead_2 = vec_back - vec_left;
 
-    ::DrawLineEx(end_pos, ::Vector2 { end_pos.x + arrowhead1.x(), end_pos.y + arrowhead1.y() }, thick, color);
-    ::DrawLineEx(end_pos, ::Vector2 { end_pos.x + arrowhead2.x(), end_pos.y + arrowhead2.y() }, thick, color);
+    ::DrawLineEx(end_pos, ::Vector2 { end_pos.x + arrowhead_1.x(), end_pos.y + arrowhead_1.y() }, thick, color);
+    ::DrawLineEx(end_pos, ::Vector2 { end_pos.x + arrowhead_2.x(), end_pos.y + arrowhead_2.y() }, thick, color);
 }
 
 // -------------------------------------------------------------------------------
 // --- Texture Drawing Functions ---
 
-void Adapter::drawTexture (const Canvas& canvas, const Texture& texture, Math::Vector2D pos, Color color, float scale, float rotation) {
-    ::Vector2 pos_rl { canvas.x() + pos.x() * canvas.scale(), canvas.y() + pos.y() * canvas.scale() };
-    
-    float final_scale = scale * canvas.scale();
-
-    ::DrawTextureEx(texture.get_raw(), pos_rl, rotation, final_scale, color);
+void Adapter::drawTexture (const Texture& texture, const Math::Transform2D& transform, Color color) {
+    if (texture.is_loaded()) {
+        ::DrawTextureEx(texture.get_raw(), { transform.pos.x(), -transform.pos.y() },
+                    transform.rotation, transform.scale, Colors::White);
+    }
+    else {
+        Adapter::drawRectangle({ transform.pos, transform.size }, color);
+    }
 }
 
 // -------------------------------------------------------------------------------
 // --- Text Drawing Functions ---
 
-void Adapter::drawFPS (const Canvas& canvas, int pos_x, int pos_y) {
-    
-    float screen_x = canvas.x() + static_cast<float>(pos_x) * canvas.scale();
-    float screen_y = canvas.y() + static_cast<float>(pos_y) * canvas.scale();
-
-    ::DrawFPS(static_cast<int>(screen_x), static_cast<int>(screen_y));
+void Adapter::drawFPS (int pos_x, int pos_y) {
+    ::DrawFPS(pos_x, pos_y);
 }
 
-
-void Adapter::drawText (const Canvas& canvas, const std::string& text, int pos_x, int pos_y, int font_size, Color color) {
-    
-    float screen_x = canvas.x() + static_cast<float>(pos_x) * canvas.scale();
-    float screen_y = canvas.y() + static_cast<float>(pos_y) * canvas.scale();
-
-    ::DrawText(text.c_str(), static_cast<int>(screen_x), static_cast<int>(screen_y), font_size, color);
+void Adapter::drawText (const std::string& text, int pos_x, int pos_y, int font_size, Color color) {
+    ::DrawText(text.c_str(), pos_x, pos_y, font_size, color);
 }
 
-};
+} // namespace Graphic

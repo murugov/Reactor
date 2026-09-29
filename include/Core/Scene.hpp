@@ -3,30 +3,31 @@
 
 #include <memory> 
 #include "Core/GameObject.hpp"
+#include "Core/LightManager.hpp"
 #include "Graphic/Camera.hpp"
 #include "Graphic/Canvas.hpp"
 
 namespace Core {
-
-struct Light {                      // NOTE: Ideally, we should put the light sources in a separate class and accurately implement the apply method for lights_
-    Math::Vector3D pos;
-    Color color = Graphic::Colors::White;
-    bool enabled = true;
-};
     
-class Scene {       // FIXME: Remove lights_ and add LightManager
+class Scene {
 private:
     Graphic::Canvas background_canvas_;
-    std::vector<std::unique_ptr<GameObject>> objects_{};
-    std::vector<Light> lights_{};
+    std::vector<std::unique_ptr<GameObject>> objects_ {};
+    LightManager light_manager_;
 
 public:
     // -------------------------------------------------------------------------------
     // --- Сonstructor ---
 
-    Scene(Graphic::Canvas background)                                        // TODO: Add color setting
+    Scene(Math::Vector2D pos, int width, int height, const std::string& texture_path)
+        : background_canvas_(pos, width, height, Graphic::SpriteMaterial(Graphic::Texture(texture_path))) {}
+
+    Scene(Math::Vector2D pos, int width, int height, Graphic::Color bg_color)
+        : background_canvas_(pos, width, height, Graphic::SpriteMaterial(bg_color)) {}
+
+    Scene(Graphic::Canvas&& background) 
         : background_canvas_(std::move(background)) {}
-    
+        
     // --- Destructor ---
 
     ~Scene() = default;
@@ -38,7 +39,7 @@ public:
     Graphic::Canvas& background()             { return background_canvas_; }
     
     const std::vector<std::unique_ptr<GameObject>>& objects() const { return objects_; }
-    const std::vector<Light>& lights()                        const { return lights_; }
+    const LightManager& lightManager()                        const { return light_manager_; }
 
     // -------------------------------------------------------------------------------
     // --- Methods Prototypes ---

@@ -6,6 +6,7 @@
 
 #include "Graphic/Colors.hpp"
 #include "Graphic/Texture.hpp"
+#include "Math/Transform.hpp"
 #include "Math/Vector.hpp"
 
 namespace Graphic {
@@ -48,8 +49,8 @@ public:
     // -------------------------------------------------------------------------------
     // --- Methods Prototypes ---
     
-    void draw (Math::Vector2D pos, Color color = Colors::Magenta) const;
-
+    void draw(Math::Transform2D transform) const;
+    Math::Vector2D getSize() const;
 };
 
 } // namespace Graphic

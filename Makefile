@@ -14,8 +14,10 @@ LDFLAGS = -isystem /opt/homebrew/include -L/opt/homebrew/lib -lraylib \
 
 COMMON_INCLUDES = -I./include
 
-COMMON_FILES = src/Colors.cpp src/Adapter.cpp src/Canvas.cpp src/Scene.cpp src/Camera.cpp src/Button.cpp
-GAME_OBJECTS = src/Valve.cpp
+CORE_FILES = src/Core/LightManager.cpp src/Core/Scene.cpp
+GAMEPLAY_FILES = src/Gameplay/Valve.cpp
+GRAPHICS_FILES = src/Graphic/Adapter.cpp src/Graphic/Camera.cpp src/Graphic/Canvas.cpp src/Graphic/Colors.cpp src/Graphic/SpriteMaterial.cpp
+# UI_FILES = 
 
 WORK_DIR = ./work
 BUILD_DIR = ./work/build
@@ -24,11 +26,11 @@ TARGET = $(RUN_DIR)/react_program
 
 all: react
 
-react: main.cpp $(COMMON_FILES) $(GAME_OBJECTS)
+react: main.cpp $(CORE_FILES) $(GAMEPLAY_FILES) $(GRAPHICS_FILES)
 	@mkdir -p $(WORK_DIR)
 	@mkdir -p $(BUILD_DIR) $(RUN_DIR)
 	@echo "-----------------------------------------------------------------------------------------"
-	$(CC) -o $(BUILD_DIR)/react_program $(FLAGS) $(LDFLAGS) main.cpp $(COMMON_INCLUDES) $(COMMON_FILES) $(GAME_OBJECTS)
+	$(CC) -o $(BUILD_DIR)/react_program $(FLAGS) $(LDFLAGS) main.cpp $(COMMON_INCLUDES) $(CORE_FILES) $(GAMEPLAY_FILES) $(GRAPHICS_FILES)
 	@mv $(BUILD_DIR)/react_program $(TARGET)
 	@echo "-----------------------------------------------------------------------------------------"
 

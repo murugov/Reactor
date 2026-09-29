@@ -6,8 +6,8 @@
 namespace Math {
 
 struct Transform2D {
-    Vector2D position {};
-    Vector2D size { 1.0f, 1.0f };
+    Vector2D pos;
+    Vector2D size;
     float scale = 1.0f;
     float rotation = 0.0f;
 };

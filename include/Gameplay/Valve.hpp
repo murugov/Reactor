@@ -2,17 +2,16 @@
 #define VALVE_HPP
 
 #include "Core/GameObject.hpp"
-#include "Graphic/Colors.hpp"
-#include "Graphic/Texture.hpp"
+#include "Graphic/SpriteMaterial.hpp"
 #include "Math/Vector.hpp"
 
 namespace Gameplay {
     
 class Valve : public Core::GameObject {
 private:    
-    Graphic::Color color_;
-    const Graphic::Texture* texture_;
-    
+    Graphic::SpriteMaterial material_;
+    Math::Vector2D size_;
+    float scale_;              
     float rotation_angle_;  // Local rotation angle
     float rotation_speed_;  // Velocity of rotation
 
@@ -21,16 +20,17 @@ public:
     // --- Constructor ---
     
     Valve(Math::Vector2D pos,
-            const Graphic::Texture& texture,
-            bool state = true,
-            Graphic::Color color = Graphic::Colors::White,
-            float start_angle = 0.0f,
-            float speed = 90.0f)
+          Graphic::SpriteMaterial&& material,
+          float scale = 1.0f,
+          bool state = true,
+          float start_angle = 0.0f,
+          float speed = 90.0f)
         : GameObject(pos, state),
-            texture_(&texture),
-            color_(color),
-            rotation_angle_(start_angle),
-            rotation_speed_(speed)
+          material_(std::move(material)),
+          size_(material_.getSize()),
+          scale_(scale),
+          rotation_angle_(start_angle),
+          rotation_speed_(speed)
     {}
 
     // --- Virtual Destructor ---
