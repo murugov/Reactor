@@ -35,10 +35,14 @@ public:
     const std::vector<Light>& lights() const { return lights_; }
 
     // -------------------------------------------------------------------------------
+    // --- Setters ---
+    
+    void setAllEnabled (bool state);
+    
+    // -------------------------------------------------------------------------------
     // --- Methods Prototypes ---
 
     void addLight (const Light& light);
-    void setAllEnabled (bool state);
     void clear ();
 };
 

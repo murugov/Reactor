@@ -28,7 +28,7 @@ public:
     // -------------------------------------------------------------------------------
     // --- Getters ---
 
-    ::Camera2D get_raw () const { return raw_camera_; }
+    ::Camera2D getRaw () const { return raw_camera_; }
 
     Math::Vector2D target() const { return Math::Vector2D{ raw_camera_.target.x, raw_camera_.target.y }; }
     float zoom() const { return raw_camera_.zoom; }
@@ -36,16 +36,16 @@ public:
     // -------------------------------------------------------------------------------
     // --- Setters ---
 
-    void set_target(const Math::Vector2D& new_target) { raw_camera_.target = ::Vector2{ new_target.x(), new_target.y() }; }
-    void set_zoom (float zoom) { raw_camera_.zoom = zoom; }
-    void set_rotation (float rotation) { raw_camera_.rotation = rotation; }
+    void setTarget (const Math::Vector2D& new_target) { raw_camera_.target = ::Vector2{ new_target.x(), new_target.y() }; }
+    void setZoom (float zoom) { raw_camera_.zoom = zoom; }
+    void setRotation (float rotation) { raw_camera_.rotation = rotation; }
     
     // -------------------------------------------------------------------------------
     // --- Methods Prototypes ---
 
     void begin () const;
     void end () const;
-    void look_at (const Math::Vector2D& world_pos);
+    void lookAt (const Math::Vector2D& world_pos);
 };
 
 } // namespace Graphic

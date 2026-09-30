@@ -62,11 +62,11 @@ public:
     // -------------------------------------------------------------------------------
     // --- Getters ---
 
-    int width()      const { return raw_texture_.width; }
-    int height()     const { return raw_texture_.height; }
-    bool is_loaded() const { return is_loaded_; }
+    int width()     const { return raw_texture_.width; }
+    int height()    const { return raw_texture_.height; }
+    bool isLoaded() const { return is_loaded_; }
 
-    ::Texture2D get_raw() const { return raw_texture_; }
+    ::Texture2D getRaw() const { return raw_texture_; }
     
     // -------------------------------------------------------------------------------
     // --- Implementation Of Methods ---

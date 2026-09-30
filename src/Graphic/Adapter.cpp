@@ -1,5 +1,6 @@
 #include "Graphic/Adapter.hpp"
 #include "Math/Transform.hpp"
+#include <raylib.h>
 
 namespace Graphic {
 
@@ -48,12 +49,31 @@ void Adapter::clearBackground (Color color) {
 }
 
 void Adapter::beginScissorMode (const Math::Transform2D& transform) {
-    ::BeginScissorMode(static_cast<int>(transform.pos.x()),  -static_cast<int>(transform.pos.y()),
-                       static_cast<int>(transform.size.x()), -static_cast<int>(transform.size.y()));
+    ::BeginScissorMode(static_cast<int>(transform.pos.x()),  static_cast<int>(transform.pos.y()),
+                       static_cast<int>(transform.size.x()), static_cast<int>(transform.size.y()));
 }
 
 void Adapter::endScissorMode () {
     ::EndScissorMode();
+}
+
+// -------------------------------------------------------------------------------
+// Timing-related functions
+
+void Adapter::setTargetFPS (int fps) {
+    ::SetTargetFPS(fps);
+}
+
+float Adapter::getFrameTime () {
+    return ::GetFrameTime();
+}
+
+double Adapter::getTime () {
+    return ::GetTime();
+}
+
+int Adapter::getFPS () {
+    return ::GetFPS();
 }
 
 // -------------------------------------------------------------------------------
@@ -115,25 +135,25 @@ Math::Vector2D Adapter::getMousePosition(void) {
 // --- Basic Shapes Drawing Functions ---
 
 void Adapter::drawPixel (const Math::Vector2D& pos, Color color) {
-    ::DrawPixelV({ pos.x(), -pos.y() }, color);
+    ::DrawPixelV({ pos.x(), pos.y() }, color);
 }
 
 void Adapter::drawLine (const Math::Vector2D& start_pos, const Math::Vector2D& end_pos, Color color, float thick) {
-    ::DrawLineEx({ start_pos.x(), -start_pos.y() }, { end_pos.x(), -end_pos.y() }, thick, color);
+    ::DrawLineEx({ start_pos.x(), start_pos.y() }, { end_pos.x(), end_pos.y() }, thick, color);
 }
 
 void Adapter::drawCircle (const Math::Circle& circle, Color color) {
-    ::DrawCircleV({ circle.pos.x(), -circle.pos.y() }, circle.radius, color);
+    ::DrawCircleV({ circle.pos.x(), circle.pos.y() }, circle.radius, color);
 }
 
 void Adapter::drawRectangle (const Math::Rectangle& rect, Color color) {
-    ::DrawRectangleV({ rect.pos.x(), -rect.pos.y() }, { rect.size.x(), -rect.size.y() }, color);
+    ::DrawRectangleV({ rect.pos.x(), rect.pos.y() }, { rect.size.x(), rect.size.y() }, color);
 } 
 
 void Adapter::drawTriangle (const Math::Triangle& triangle, Color color) {
-    ::DrawTriangle({ triangle.v1.x(), -triangle.v1.y() },
-                   { triangle.v2.x(), -triangle.v2.y() },
-                   { triangle.v3.x(), -triangle.v3.y() }, color);
+    ::DrawTriangle({ triangle.v1.x(), triangle.v1.y() },
+                   { triangle.v2.x(), triangle.v2.y() },
+                   { triangle.v3.x(), triangle.v3.y() }, color);
 }
 
 void Adapter::drawVector(const Math::Transform2D& transform, Color color, float thick) {
@@ -165,14 +185,37 @@ void Adapter::drawVector(const Math::Transform2D& transform, Color color, float 
 // --- Texture Drawing Functions ---
 
 void Adapter::drawTexture (const Texture& texture, const Math::Transform2D& transform, Color color) {
-    if (texture.is_loaded()) {
-        ::DrawTextureEx(texture.get_raw(), { transform.pos.x(), -transform.pos.y() },
-                    transform.rotation, transform.scale, Colors::White);
+    if (texture.isLoaded()) {
+        ::Rectangle source_rec = { 
+            0.0f, 
+            0.0f, 
+            static_cast<float>(texture.width()), 
+            static_cast<float>(texture.height()) 
+        };
+
+        ::Rectangle dest_rec = { 
+            transform.pos.x(), 
+            transform.pos.y(), 
+            transform.size.x() * transform.scale, 
+            transform.size.y() * transform.scale 
+        };
+
+        ::Vector2 origin = { 0.0f, 0.0f };
+        if (transform.rotation != 0.0f) {
+            origin.x = (transform.size.x() * transform.scale) / 2.0f;
+            origin.y = (transform.size.y() * transform.scale) / 2.0f;
+            
+            dest_rec.x += origin.x;
+            dest_rec.y += origin.y;
+        }
+
+        ::DrawTexturePro(texture.getRaw(), source_rec, dest_rec, origin, transform.rotation, Colors::White);
     }
     else {
         Adapter::drawRectangle({ transform.pos, transform.size }, color);
     }
 }
+
 
 // -------------------------------------------------------------------------------
 // --- Text Drawing Functions ---

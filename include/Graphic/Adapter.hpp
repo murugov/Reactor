@@ -42,6 +42,14 @@ public:
     static void endScissorMode   (); 
 
     // -------------------------------------------------------------------------------
+    // Timing-related functions
+    
+    static void   setTargetFPS (int fps);
+    static float  getFrameTime ();
+    static double getTime      ();
+    static int    getFPS       ();
+    
+    // -------------------------------------------------------------------------------
     // --- Input-related Functions: Keyboard ---
 
     static bool isKeyPressed       (int key);

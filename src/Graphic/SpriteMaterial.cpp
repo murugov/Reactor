@@ -12,7 +12,7 @@ Math::Vector2D SpriteMaterial::getSize() const {
         using T = std::decay_t<decltype(arg)>;
         
         if constexpr (std::is_same_v<T, Texture>) {
-            if (arg.is_loaded()) {
+            if (arg.isLoaded()) {
                 return { static_cast<float>(arg.width()), static_cast<float>(arg.height()) };
             }
         }

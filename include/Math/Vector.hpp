@@ -53,10 +53,10 @@ public:
     // -------------------------------------------------------------------------------
     // --- Setters ---
 
-    void set_x(const T& val) { data_[0] = val; }
-    void set_y(const T& val) { static_assert(N >= 2, "Vector must be 2D or higher"); data_[1] = val; } 
-    void set_z(const T& val) { static_assert(N >= 3, "Vector must be 3D or higher"); data_[2] = val; }
-    void set_w(const T& val) { static_assert(N >= 4, "Vector must be 4D or higher"); data_[3] = val; } 
+    void setX(const T& val) { data_[0] = val; }
+    void setY(const T& val) { static_assert(N >= 2, "Vector must be 2D or higher"); data_[1] = val; } 
+    void setZ(const T& val) { static_assert(N >= 3, "Vector must be 3D or higher"); data_[2] = val; }
+    void setW(const T& val) { static_assert(N >= 4, "Vector must be 4D or higher"); data_[3] = val; } 
 
     // -------------------------------------------------------------------------------
     // --- Methods Prototypes ---

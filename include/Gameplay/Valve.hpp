@@ -19,13 +19,14 @@ public:
     // -------------------------------------------------------------------------------
     // --- Constructor ---
     
-    Valve(Math::Vector2D pos,
+    Valve (Math::Vector2D pos,
           Graphic::SpriteMaterial&& material,
           float scale = 1.0f,
           bool state = true,
           float start_angle = 0.0f,
-          float speed = 90.0f)
-        : GameObject(pos, state),
+          float speed = 90.0f,
+          Math::Vector2D vel = { 0.0f, 0.0f })
+        : GameObject(pos, vel, state),
           material_(std::move(material)),
           size_(material_.getSize()),
           scale_(scale),
@@ -35,13 +36,15 @@ public:
 
     // --- Virtual Destructor ---
     
-    ~Valve() override = default;
+    ~Valve () override = default;
 
     // -------------------------------------------------------------------------------
     // --- Virtual Methods Prototypes ---
     
     void update (float dt) override;
     void draw () const override;
+
+    Core::HitboxType getHitboxType () const override { return Core::HitboxType::Circle; };
 };
 
 } // namespace Gameplay

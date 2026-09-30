@@ -9,13 +9,13 @@ namespace Core {
 
 void Scene::bind (const Graphic::Camera& camera) const {
     // NOTE: Begin scissor mode (define screen area for following drawing)
-    camera.begin();
     Graphic::Adapter::beginScissorMode({ background_canvas_.pos(), background_canvas_.size() });
+    camera.begin();
 }
 
 void Scene::unbind (const Graphic::Camera& camera) const {
-    Graphic::Adapter::endScissorMode();
     camera.end();
+    Graphic::Adapter::endScissorMode();
 }
 
 void Scene::addObject(std::unique_ptr<GameObject> obj) {
@@ -25,6 +25,16 @@ void Scene::addObject(std::unique_ptr<GameObject> obj) {
 void Scene::setAllObjects (bool state) {
     for (auto& object : objects_) {
         object->setEnabled(state);
+    }
+}
+
+void Scene::update(float dt) {
+    // TODO: Add updating light_manager_
+
+    for (auto& obj : objects_) {
+        if (obj && obj->isEnabled()) {
+            obj->update(dt); 
+        }
     }
 }
 

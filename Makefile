@@ -1,6 +1,6 @@
 CC = clang++
 
-FLAGS = -DDEBUG -D_DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ -Wc++14-compat -Wmissing-declarations -Wcast-align \
+FLAGS = -DDEBUG -D_DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ -Wc++17-compat -Wmissing-declarations -Wcast-align \
 		-Wcast-qual -Wchar-subscripts -Wconversion -Wctor-dtor-privacy -Wempty-body -Wfloat-equal -Wformat-nonliteral \
 		-Wformat-security -Wformat-signedness -Wformat=2 -Winline -Wnon-virtual-dtor -Woverloaded-virtual -Wpacked \
 		-Wpointer-arith -Winit-self -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-overflow=2 \
@@ -14,8 +14,8 @@ LDFLAGS = -isystem /opt/homebrew/include -L/opt/homebrew/lib -lraylib \
 
 COMMON_INCLUDES = -I./include
 
-CORE_FILES = src/Core/LightManager.cpp src/Core/Scene.cpp
-GAMEPLAY_FILES = src/Gameplay/Valve.cpp
+CORE_FILES     = src/Core/LightManager.cpp src/Core/PhysicsEngine.cpp src/Core/Scene.cpp
+GAMEPLAY_FILES = src/Gameplay/CircleMolecule.cpp src/Gameplay/MolecularContainer.cpp src/Gameplay/SquareMolecule.cpp src/Gameplay/Valve.cpp
 GRAPHICS_FILES = src/Graphic/Adapter.cpp src/Graphic/Camera.cpp src/Graphic/Canvas.cpp src/Graphic/Colors.cpp src/Graphic/SpriteMaterial.cpp
 # UI_FILES = 
 
