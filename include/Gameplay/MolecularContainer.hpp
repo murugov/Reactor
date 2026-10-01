@@ -19,6 +19,7 @@ struct MoleculeSpawner {
     SpawnType type_to_spawn;
     float spawn_interval = 0.4f;
     float timer = 0.0f;
+    bool enabled_ = false;
 };
     
 class MolecularContainer : public Core::GameObject {
@@ -42,6 +43,11 @@ public:
     // --- Destructor ---
     
     ~MolecularContainer () override = default;
+
+    // -------------------------------------------------------------------------------
+    // --- Getters ---
+    
+    std::vector<MoleculeSpawner>& spawners() { return spawners_; }
 
     // -------------------------------------------------------------------------------
     // --- Methods Prototypes ---

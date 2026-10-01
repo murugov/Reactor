@@ -17,7 +17,7 @@ public:
     // --- Constructor ---
     
     CircleMolecule (Math::Vector2D pos, Math::Vector2D vel, float radius, Graphic::Color color, bool state = true)
-        : GameObject (pos, vel, (radius * radius), state), radius_(radius), color_(color) {}
+        : GameObject (pos, vel, (3.1415f * radius * radius), state), radius_(radius), color_(color) {}
 
     // --- Destructor ---
     

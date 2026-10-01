@@ -14,6 +14,7 @@ private:
     float scale_;              
     float rotation_angle_;  // Local rotation angle
     float rotation_speed_;  // Velocity of rotation
+    bool is_open_;
 
 public:
     // -------------------------------------------------------------------------------
@@ -25,18 +26,25 @@ public:
           bool state = true,
           float start_angle = 0.0f,
           float speed = 90.0f,
+          bool is_open = false,
           Math::Vector2D vel = { 0.0f, 0.0f })
         : GameObject(pos, vel, state),
           material_(std::move(material)),
           size_(material_.getSize()),
           scale_(scale),
           rotation_angle_(start_angle),
-          rotation_speed_(speed)
+          rotation_speed_(speed),
+          is_open_(is_open)
     {}
 
     // --- Virtual Destructor ---
     
     ~Valve () override = default;
+
+    // -------------------------------------------------------------------------------
+    // --- Getters ---
+    
+    bool isOpen () const { return is_open_; }
 
     // -------------------------------------------------------------------------------
     // --- Virtual Methods Prototypes ---
