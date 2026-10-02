@@ -1,4 +1,3 @@
-// Gameplay/MolecularContainer.hpp
 #ifndef MOLECULAR_CONTAINER_HPP
 #define MOLECULAR_CONTAINER_HPP
 
@@ -53,7 +52,6 @@ public:
     // --- Getters ---
     
     std::vector<MoleculeSpawner>& spawners() { return spawners_; }
-<<<<<<< HEAD
     
     float temperature() const { return current_temperature_; }
     float pressure()    const { return current_pressure_; }    
@@ -62,8 +60,6 @@ public:
     // --- Setters ---
 
     void setHeater (Core::GameObject* heater) { heater_ptr_ = heater; }
-=======
->>>>>>> 1c2f76a8d19988a9f911ee2d12fce7bfbec2c368
 
     // -------------------------------------------------------------------------------
     // --- Methods Prototypes ---

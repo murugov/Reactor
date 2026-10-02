@@ -2,19 +2,13 @@
 #include "Core/Scene.hpp"
 #include "Gameplay/Heater.hpp"
 #include "Gameplay/MolecularContainer.hpp"
-<<<<<<< HEAD
 #include "Gameplay/Plot.hpp"
-#include "Gameplay/TemperatureController.hpp"
-=======
->>>>>>> 1c2f76a8d19988a9f911ee2d12fce7bfbec2c368
-#include "Gameplay/Valve.hpp"
+#include "UI/TemperatureController.hpp"
+#include "UI/Valve.hpp"
 #include "Graphic/Adapter.hpp"
 #include "Graphic/Canvas.hpp"
 #include "Graphic/Camera.hpp"
-<<<<<<< HEAD
 #include "Graphic/Colors.hpp"
-=======
->>>>>>> 1c2f76a8d19988a9f911ee2d12fce7bfbec2c368
 #include "Graphic/SpriteMaterial.hpp"
 #include "Graphic/Texture.hpp"
 #include "Math/Vector.hpp"
@@ -35,13 +29,14 @@ int main() {
     // --- Initialize Objects ---
 
     // --- Red Valve ---
+    
     Graphic::Texture red_valve_tex("assets/textures/red_valve.png");
     Graphic::SpriteMaterial red_valve_material(std::move(red_valve_tex));
     
     Gameplay::Valve* raw_red_valve_ptr = new Gameplay::Valve(
         Math::Vector2D { 110.0f, 318.0f }, 
         std::move(red_valve_material),
-        0.7f,  // scale
+        Math::Vector2D { 75.0f, 75.0f },
         true,  // state (enabled)
         0.0f,  // start rotation angle
         120.0f // start velocity of rotation
@@ -49,13 +44,14 @@ int main() {
     main_scene.addObject(std::unique_ptr<Core::GameObject>(raw_red_valve_ptr));
 
     // --- Blue Valve ---
+    
     Graphic::Texture blue_valve_tex("assets/textures/blue_valve.png");
     Graphic::SpriteMaterial blue_valve_material(std::move(blue_valve_tex));
     
     Gameplay::Valve* raw_blue_valve_ptr = new Gameplay::Valve(
         Math::Vector2D { 525.0f, 318.0f }, 
         std::move(blue_valve_material),
-        0.7f,  // scale
+        Math::Vector2D { 75.0f, 75.0f },
         true,  // state (enabled)
         0.0f,  // start rotation angle
         120.0f // start velocity of rotation
@@ -70,8 +66,6 @@ int main() {
     );
 
     // --- Molecule Spawners ---
-    
-    // raw_vessel_ptr->setValveLink(raw_valve_ptr);
     
     Gameplay::MoleculeSpawner left_pipe {};
     left_pipe.pos            = Math::Vector2D { 200.0f, 205.0f }; 
@@ -153,16 +147,6 @@ int main() {
             temp_plot.pushValue(raw_vessel_ptr->temperature());
             press_plot.pushValue(raw_vessel_ptr->pressure()); 
         }
-    while (!Graphic::Adapter::shouldClose()) {
-        float dt = Graphic::Adapter::getFrameTime(); 
-
-        auto& spawners = raw_vessel_ptr->spawners();
-           
-        spawners[0].enabled_ = raw_red_valve_ptr->isOpen();
-           
-        spawners[1].enabled_ = raw_blue_valve_ptr->isOpen();
-           
-        main_scene.update(dt); 
 
         Graphic::Adapter::beginDrawing();
             Graphic::Adapter::clearBackground(Graphic::Colors::Black);
@@ -190,9 +174,6 @@ int main() {
                 Graphic::Adapter::drawText("SYSTEM FAILURE: DUMBASS DETECTED", 40, 180, 36, Graphic::Colors::Red);
                 Graphic::Adapter::drawText("REACTOR TERMINATED DUE TO FPS MELTDOWN", 150, 240, 20, Graphic::Colors::White);
             }
-            main_scene.bind(main_camera);        
-                main_scene.draw();
-            main_scene.unbind(main_camera);
         
         Graphic::Adapter::endDrawing();
     }

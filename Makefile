@@ -15,9 +15,9 @@ LDFLAGS = -isystem /opt/homebrew/include -L/opt/homebrew/lib -lraylib \
 COMMON_INCLUDES = -I./include
 
 CORE_FILES     = src/Core/ChemicalEngine.cpp src/Core/LightManager.cpp src/Core/PhysicsEngine.cpp src/Core/Scene.cpp
-GAMEPLAY_FILES = src/Gameplay/CircleMolecule.cpp src/Gameplay/Heater.cpp src/Gameplay/MolecularContainer.cpp src/Gameplay/Plot.cpp src/Gameplay/SquareMolecule.cpp src/Gameplay/TemperatureController.cpp src/Gameplay/Valve.cpp
+GAMEPLAY_FILES = src/Gameplay/CircleMolecule.cpp src/Gameplay/Heater.cpp src/Gameplay/MolecularContainer.cpp src/Gameplay/Plot.cpp src/Gameplay/SquareMolecule.cpp
 GRAPHICS_FILES = src/Graphic/Adapter.cpp src/Graphic/Camera.cpp src/Graphic/Canvas.cpp src/Graphic/Colors.cpp src/Graphic/SpriteMaterial.cpp
-# UI_FILES = 
+UI_FILES       = src/UI/TemperatureController.cpp src/UI/Valve.cpp
 
 WORK_DIR = ./work
 BUILD_DIR = ./work/build
@@ -26,11 +26,11 @@ TARGET = $(RUN_DIR)/react_program
 
 all: react
 
-react: main.cpp $(CORE_FILES) $(GAMEPLAY_FILES) $(GRAPHICS_FILES)
+react: main.cpp $(CORE_FILES) $(GAMEPLAY_FILES) $(GRAPHICS_FILES) $(UI_FILES)
 	@mkdir -p $(WORK_DIR)
 	@mkdir -p $(BUILD_DIR) $(RUN_DIR)
 	@echo "-----------------------------------------------------------------------------------------"
-	$(CC) -o $(BUILD_DIR)/react_program $(FLAGS) $(LDFLAGS) main.cpp $(COMMON_INCLUDES) $(CORE_FILES) $(GAMEPLAY_FILES) $(GRAPHICS_FILES)
+	$(CC) -o $(BUILD_DIR)/react_program $(FLAGS) $(LDFLAGS) main.cpp $(COMMON_INCLUDES) $(CORE_FILES) $(GAMEPLAY_FILES) $(GRAPHICS_FILES) $(UI_FILES)
 	@mv $(BUILD_DIR)/react_program $(TARGET)
 	@echo "-----------------------------------------------------------------------------------------"
 

@@ -23,6 +23,8 @@ void MolecularContainer::addSpawner(const MoleculeSpawner& spawner) {
 // -------------------------------------------------------------------------------
 // --- Implementation Of Virtual Methods ---
 
+int clocks = 0;
+
 void MolecularContainer::update(float dt) {
     if (!enabled_) return;
 
@@ -37,15 +39,9 @@ void MolecularContainer::update(float dt) {
                 };
     
                 if (spawner.type_to_spawn == SpawnType::Circle) {
-<<<<<<< HEAD
                     addMolecule(std::make_unique<CircleMolecule>(spawner.pos, rand_vel, 1.0f, Graphic::Colors::Red));
                 } else if (spawner.type_to_spawn == SpawnType::Square) {
                     addMolecule(std::make_unique<SquareMolecule>(spawner.pos, rand_vel, Math::Vector2D { 4.0f, 4.0f }, Graphic::Colors::Blue));
-=======
-                    addMolecule(std::make_unique<CircleMolecule>(spawner.pos, rand_vel, 3.0f, Graphic::Colors::Red));
-                } else if (spawner.type_to_spawn == SpawnType::Square) {
-                    addMolecule(std::make_unique<SquareMolecule>(spawner.pos, rand_vel, Math::Vector2D { 6.0f, 6.0f }, Graphic::Colors::Blue));
->>>>>>> 1c2f76a8d19988a9f911ee2d12fce7bfbec2c368
                 }
             }
         }
@@ -78,7 +74,14 @@ void MolecularContainer::update(float dt) {
     }
     
     // --- Processing reactions and collisions ---
-    Core::ChemicalEngine::processReactions(sub_objects_);
+    if (clocks == 5) {
+        Core::ChemicalEngine::processReactions(sub_objects_);
+        clocks = 0;
+    }
+    else {
+        clocks++;
+    }
+    
     Core::PhysicsEngine::collideObjects(sub_objects_);
 
     // --- Interacting with heater ---
