@@ -17,7 +17,7 @@ public:
     // --- Constructor ---
     
     CircleMolecule (Math::Vector2D pos, Math::Vector2D vel, float radius, Graphic::Color color, bool state = true)
-        : GameObject (pos, vel, (radius * radius), state), radius_(radius), color_(color) {}
+        : GameObject (pos, vel, (3.1415f * radius * radius), state), radius_(radius), color_(color) {}
 
     // --- Destructor ---
     
@@ -26,7 +26,7 @@ public:
     // -------------------------------------------------------------------------------
     // --- Getters ---
     
-    float radius () const { return radius_; }
+    float radius () const override { return radius_; }
 
     // -------------------------------------------------------------------------------
     // --- Setters ---
@@ -39,6 +39,7 @@ public:
     void update (float dt) override;
     void draw () const override;
 
+    Core::ObjectType getObjectType () const override { return Core::ObjectType::Circle; }
     Core::HitboxType getHitboxType () const override { return Core::HitboxType::Circle; };
 };
 

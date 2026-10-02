@@ -1,5 +1,6 @@
 #include "Graphic/Adapter.hpp"
 #include "Math/Transform.hpp"
+#include "Math/Vector.hpp"
 #include <raylib.h>
 
 namespace Graphic {
@@ -102,33 +103,42 @@ bool Adapter::isKeyUp (int key) {
 // -------------------------------------------------------------------------------
 // --- Input-related Functions: Mouse ---
 
-bool Adapter::isMouseButtonPressed(int button) {
+bool Adapter::isMouseButtonPressed (int button) {
     return ::IsMouseButtonPressed(button);
 }
 
-bool Adapter::isMouseButtonDown(int button) {
+bool Adapter::isMouseButtonDown (int button) {
     return ::IsMouseButtonDown(button);
 }
 
-bool Adapter::isMouseButtonReleased(int button) {
+bool Adapter::isMouseButtonReleased (int button) {
     return ::IsMouseButtonReleased(button);
 }
 
-bool Adapter::isMouseButtonUp(int button) {
+bool Adapter::isMouseButtonUp (int button) {
     return ::IsMouseButtonUp(button);
 }
 
-int Adapter::getMouseX() {
+int Adapter::getMouseX () {
     return ::GetMouseX();
 }
 
-int Adapter::getMouseY() {
+int Adapter::getMouseY () {
     return ::GetMouseY();
 }
 
-Math::Vector2D Adapter::getMousePosition(void) {
+Math::Vector2D Adapter::getMousePosition (void) {
     ::Vector2 mouse_pos = ::GetMousePosition();
     return Math::Vector2D { mouse_pos.x, mouse_pos.y } ;
+}
+
+float Adapter::getMouseWheelMove () {
+    return ::GetMouseWheelMove();
+}
+
+Math::Vector2D Adapter::getMouseWheelMoveV () {
+    ::Vector2 wheel_move = ::GetMouseWheelMoveV();
+    return Math::Vector2D { wheel_move.x, wheel_move.y } ;
 }
 
 // -------------------------------------------------------------------------------

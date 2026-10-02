@@ -1,4 +1,4 @@
-#include "Gameplay/Valve.hpp"
+#include "Gameplay/TemperatureController.hpp"
 #include "Graphic/Adapter.hpp"
 
 namespace Gameplay {
@@ -6,8 +6,10 @@ namespace Gameplay {
 // -------------------------------------------------------------------------------
 // --- Implementation Of Virtual Methods ---
     
-void Valve::update(float dt) {
-    if (Graphic::Adapter::isMouseButtonPressed(1)) { // FIXME: Add button keys
+void TemperatureController::update(float /*dt*/) {
+    float wheel = Graphic::Adapter::getMouseWheelMove();
+
+    if (std::abs(wheel) > 1e-5f) {
         Math::Vector2D mouse_pos = Graphic::Adapter::getMousePosition();
 
         float scaled_width  = size_.x();
@@ -17,21 +19,19 @@ void Valve::update(float dt) {
         bool hit_y = (mouse_pos.y() >= pos_.y()) && (mouse_pos.y() <= pos_.y() + scaled_height);
 
         if (hit_x && hit_y) {
-            is_open_ = !is_open_;
+            rotation_angle_ += wheel * 0.5f;
+            
+            if (rotation_angle_ > 90.0f) {
+                rotation_angle_ = 90.0f;
+            }
+            if (rotation_angle_ < -90.0f) {
+                rotation_angle_ = -90.0f;
+            }
         }
-    }
-
-    float target_angle = is_open_ ? -120.0f : 0.0f;
-
-    if ((rotation_angle_ > target_angle) && is_open_) {        
-        rotation_angle_ -= rotation_speed_ * dt;
-    }
-    else if ((rotation_angle_ < target_angle) && !is_open_) {        
-        rotation_angle_ += rotation_speed_ * dt;
     }
 }
 
-void Valve::draw() const {
+void TemperatureController::draw() const {
     Math::Transform2D transform {};
     transform.pos      = pos_;
     transform.size     = size_;          

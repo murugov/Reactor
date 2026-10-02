@@ -27,6 +27,14 @@ public:
           : transform_{pos, {static_cast<float>(width), static_cast<float>(height)}, scale, 0.0f}
           , material_(std::move(material)) {}
 
+    Canvas(Math::Vector2D pos, Math::Vector2D size, Color color, float scale = 1.0f)
+        : transform_{pos, size, scale, 0.0f}
+        , material_(color) {}
+        
+    Canvas(Math::Vector2D pos, Math::Vector2D size, SpriteMaterial&& material, float scale = 1.0f)
+        : transform_{pos, size, scale, 0.0f}
+        , material_(std::move(material)) {}
+
     // --- Copy Semantics Disabled ---
 
     Canvas(const Canvas& other) = delete;

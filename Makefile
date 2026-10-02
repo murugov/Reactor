@@ -14,8 +14,8 @@ LDFLAGS = -isystem /opt/homebrew/include -L/opt/homebrew/lib -lraylib \
 
 COMMON_INCLUDES = -I./include
 
-CORE_FILES     = src/Core/LightManager.cpp src/Core/PhysicsEngine.cpp src/Core/Scene.cpp
-GAMEPLAY_FILES = src/Gameplay/CircleMolecule.cpp src/Gameplay/MolecularContainer.cpp src/Gameplay/SquareMolecule.cpp src/Gameplay/Valve.cpp
+CORE_FILES     = src/Core/ChemicalEngine.cpp src/Core/LightManager.cpp src/Core/PhysicsEngine.cpp src/Core/Scene.cpp
+GAMEPLAY_FILES = src/Gameplay/CircleMolecule.cpp src/Gameplay/Heater.cpp src/Gameplay/MolecularContainer.cpp src/Gameplay/Plot.cpp src/Gameplay/SquareMolecule.cpp src/Gameplay/TemperatureController.cpp src/Gameplay/Valve.cpp
 GRAPHICS_FILES = src/Graphic/Adapter.cpp src/Graphic/Camera.cpp src/Graphic/Canvas.cpp src/Graphic/Colors.cpp src/Graphic/SpriteMaterial.cpp
 # UI_FILES = 
 

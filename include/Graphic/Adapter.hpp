@@ -70,6 +70,9 @@ public:
     static int getMouseY ();
     static Math::Vector2D getMousePosition (void);
 
+    static float          getMouseWheelMove ();
+    static Math::Vector2D getMouseWheelMoveV ();
+
     // -------------------------------------------------------------------------------
     // --- Basic Shapes Drawing Functions ---
 

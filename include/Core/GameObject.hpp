@@ -5,10 +5,19 @@
 
 namespace Core {
 
+enum class ObjectType {
+    Unknown,
+    Circle,
+    Square,
+    Valve,
+    Heater,
+    TemperatureController
+};
+    
 enum class HitboxType {
     None,
     Circle,
-    Square
+    Rectangle
 };
     
 class GameObject {
@@ -37,6 +46,10 @@ public:
     float mass ()              const { return mass_; }
     bool isEnabled ()          const { return enabled_; }
 
+    virtual float radius() const { return 0.0f; }
+    virtual Math::Vector2D size() const { return { 0.0f, 0.0f }; }
+    virtual float rotation_angle() const { return 0.0f; }
+
     // -------------------------------------------------------------------------------
     // --- Setters ---
     
@@ -50,7 +63,8 @@ public:
     
     virtual void update (float /*dt*/) {}
     virtual void draw () const = 0;        
-    
+
+    virtual ObjectType getObjectType () const = 0;
     virtual HitboxType getHitboxType () const = 0;
 
 };

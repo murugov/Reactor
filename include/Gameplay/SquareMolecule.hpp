@@ -28,7 +28,7 @@ public:
     // -------------------------------------------------------------------------------
     // --- Getters ---
     
-    Math::Vector2D size () const { return size_; }
+    Math::Vector2D size () const override { return size_; }
     
     // -------------------------------------------------------------------------------
     // --- Setters ---
@@ -41,7 +41,8 @@ public:
     void update (float dt) override;
     void draw () const override;
 
-    Core::HitboxType getHitboxType () const override { return Core::HitboxType::Square; };
+    Core::ObjectType getObjectType () const override { return Core::ObjectType::Square; }
+    Core::HitboxType getHitboxType () const override { return Core::HitboxType::Rectangle; };
 };
 
 } // namespace Gameplay
