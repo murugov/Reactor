@@ -1,8 +1,8 @@
 #ifndef SQUARE_MOLECULE_HPP
 #define SQUARE_MOLECULE_HPP
 
-#include "Graphic/Colors.hpp"
 #include "Core/GameObject.hpp"
+#include "Graphic/Colors.hpp"
 #include "Math/Vector.hpp"
 
 namespace Gameplay {

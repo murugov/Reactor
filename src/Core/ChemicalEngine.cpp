@@ -6,28 +6,27 @@
 
 namespace Core {
 
-// -------------------------------------------------------------------------------
-// --- Implementation Of Static Methods ---
-    
-bool ChemicalEngine::checkIntersection(const Core::GameObject& obj1, const Core::GameObject& obj2) {
-    auto t1 = obj1.getHitboxType();
-    auto t2 = obj2.getHitboxType();
-    
-    if (t1 == HitboxType::Circle && t2 == HitboxType::Circle) {
+static bool checkIntersection (const Core::GameObject& obj1, const Core::GameObject& obj2) {
+    auto type1 = obj1.getHitboxType();
+    auto type2 = obj2.getHitboxType();
+
+    if (obj1.getObjectType() == Core::ObjectType::Heater || obj2.getObjectType() == Core::ObjectType::Heater) return false;
+
+    if (type1 == HitboxType::Circle && type2 == HitboxType::Circle) {
         float dist_sq = (obj2.pos().x() - obj1.pos().x()) * (obj2.pos().x() - obj1.pos().x()) +
                         (obj2.pos().y() - obj1.pos().y()) * (obj2.pos().y() - obj1.pos().y());
         float min_dist = obj1.radius() + obj2.radius();
         return dist_sq < (min_dist * min_dist);
     }
-    else if (t1 == HitboxType::Rectangle && t2 == HitboxType::Rectangle) {
+    else if (type1 == HitboxType::Rectangle && type2 == HitboxType::Rectangle) {
         return (obj1.pos().x() < obj2.pos().x() + obj2.size().x() &&
                 obj1.pos().x() + obj1.size().x() > obj2.pos().x() &&
                 obj1.pos().y() < obj2.pos().y() + obj2.size().y() &&
                 obj1.pos().y() + obj1.size().y() > obj2.pos().y());
     }
 
-    const Core::GameObject& square = (t1 == HitboxType::Rectangle) ? obj1 : obj2;
-    const Core::GameObject& circle = (t1 == HitboxType::Circle) ? obj1 : obj2;
+    const Core::GameObject& square = (type1 == HitboxType::Rectangle) ? obj1 : obj2;
+    const Core::GameObject& circle = (type1 == HitboxType::Circle) ? obj1 : obj2;
     
     float closest_x = std::clamp(circle.pos().x(), square.pos().x(), square.pos().x() + square.size().x());
     float closest_y = std::clamp(circle.pos().y(), square.pos().y(), square.pos().y() + square.size().y());
@@ -36,17 +35,43 @@ bool ChemicalEngine::checkIntersection(const Core::GameObject& obj1, const Core:
                     (circle.pos().y() - closest_y) * (circle.pos().y() - closest_y);
     return dist_sq < (circle.radius() * circle.radius());
 }
+    
+// -------------------------------------------------------------------------------
+// --- Implementation Of Static Methods ---
 
-void ChemicalEngine::reactCircleCircle(Core::GameObject& c1, Core::GameObject& c2, 
+void (*resolveReaction[4]) (Core::GameObject& obj1, Core::GameObject& obj2,
+                            std::vector<std::unique_ptr<Core::GameObject>>& spawn_queue) = {
+    ChemicalEngine::reactCircleCircle,
+    ChemicalEngine::reactCircleSquare,
+    ChemicalEngine::reactSquareCircle,
+    ChemicalEngine::reactSquareSquare
+};
+
+void ChemicalEngine::reactCircleCircle(Core::GameObject& circle1, Core::GameObject& circle2, 
                                       std::vector<std::unique_ptr<Core::GameObject>>& spawn_queue) {
-    Math::Vector2D new_vel = (c1.velocity() * c1.mass() + c2.velocity() * c2.mass()) * (1.0f / (c1.mass() + c2.mass()));
-    Math::Vector2D spawn_pos = (c1.pos() + c2.pos()) * 0.5f;
+    Math::Vector2D new_vel = (circle1.velocity() * circle1.mass() + circle2.velocity() * circle2.mass()) * (1.0f / (circle1.mass() + circle2.mass()));
+    Math::Vector2D spawn_pos = (circle1.pos() + circle2.pos()) * 0.5f;
 
-    c1.setEnabled(false);
-    c2.setEnabled(false);
+    circle1.setEnabled(false);
+    circle2.setEnabled(false);
 
     spawn_queue.push_back(std::make_unique<Gameplay::SquareMolecule>(
-        spawn_pos, new_vel, Math::Vector2D{ c1.radius() * 4.0f, c1.radius() * 4.0f }, Graphic::Colors::Blue, 2.0f
+        spawn_pos, new_vel, Math::Vector2D{ circle1.radius() * 4.0f, circle1.radius() * 4.0f }, Graphic::Colors::Blue, 2.0f
+    ));
+}
+
+void ChemicalEngine::reactCircleSquare(Core::GameObject& circle, Core::GameObject& square, 
+                                      std::vector<std::unique_ptr<Core::GameObject>>& spawn_queue) {
+    float new_mass = circle.mass() + square.mass();
+    Math::Vector2D new_vel = (circle.velocity() * circle.mass() + square.velocity() * square.mass()) * (1.0f / new_mass);
+
+    circle.setEnabled(false);
+    square.setEnabled(false);
+
+    Math::Vector2D new_size = { square.size().x() + circle.radius() * 2.0f, square.size().y() + circle.radius() * 2.0f };
+
+    spawn_queue.push_back(std::make_unique<Gameplay::SquareMolecule>(
+        square.pos(), new_vel, new_size, Graphic::Colors::Green, new_mass
     ));
 }
 
@@ -65,18 +90,18 @@ void ChemicalEngine::reactSquareCircle(Core::GameObject& square, Core::GameObjec
     ));
 }
 
-void ChemicalEngine::reactSquareSquare(Core::GameObject& s1, Core::GameObject& s2, 
+void ChemicalEngine::reactSquareSquare(Core::GameObject& square1, Core::GameObject& square2, 
                                       std::vector<std::unique_ptr<Core::GameObject>>& spawn_queue) {
-    if (s1.getObjectType() == Core::ObjectType::Heater || s2.getObjectType() == Core::ObjectType::Heater) return;
-    if (s1.mass() <= 0.0f || s2.mass() <= 0.0f) return;
+    if (square1.getObjectType() == Core::ObjectType::Heater || square2.getObjectType() == Core::ObjectType::Heater) return;
+    if (square1.mass() <= 0.0f || square2.mass() <= 0.0f) return;
 
-    int count_to_spawn = static_cast<int>(s1.mass() + s2.mass());
+    int count_to_spawn = static_cast<int>(square1.mass() + square2.mass());
     if (count_to_spawn <= 0) return;
 
-    Math::Vector2D base_pos = (s1.pos() + s2.pos()) * 0.5f;
+    Math::Vector2D base_pos = (square1.pos() + square2.pos()) * 0.5f;
 
-    s1.setEnabled(false);
-    s2.setEnabled(false);
+    square1.setEnabled(false);
+    square2.setEnabled(false);
 
     const float molecule_radius = 1.0f;
     const float spread_distance = molecule_radius * 5.0f; 
@@ -101,37 +126,23 @@ void ChemicalEngine::reactSquareSquare(Core::GameObject& s1, Core::GameObject& s
 }
 
 void ChemicalEngine::processReactions(std::vector<std::unique_ptr<Core::GameObject>>& objects) {
-    std::vector<std::unique_ptr<Core::GameObject>> spawn_queue;
+    std::vector<std::unique_ptr<Core::GameObject>> spawn_queue {};
 
     for (size_t i = 0; i < objects.size(); ++i) {
-        if (!objects[i] || !objects[i]->isEnabled()) continue;
+        GameObject* obj1 = objects[i].get();
+        if (!obj1 || !obj1->isEnabled()) continue;
         
-        if (objects[i]->getObjectType() == Core::ObjectType::Heater) continue;
-
         for (size_t j = i + 1; j < objects.size(); ++j) {
-            if (!objects[j] || !objects[j]->isEnabled()) continue;
-            if (objects[j]->getObjectType() == Core::ObjectType::Heater) continue;
 
-            if (checkIntersection(*objects[i], *objects[j])) {
-                auto t1 = objects[i]->getHitboxType();
-                auto t2 = objects[j]->getHitboxType();
+            GameObject* obj2 = objects[j].get();
+            if (!obj2 || !obj2->isEnabled()) continue;
 
-                if (t1 == HitboxType::Circle && t2 == HitboxType::Circle) {
-                    reactCircleCircle(*objects[i], *objects[j], spawn_queue);
-                    break;
-                }
-                else if (t1 == HitboxType::Rectangle && t2 == HitboxType::Rectangle) {
-                    reactSquareSquare(*objects[i], *objects[j], spawn_queue);
-                    break;
-                }
-                else if (t1 == HitboxType::Rectangle && t2 == HitboxType::Circle) {
-                    reactSquareCircle(*objects[i], *objects[j], spawn_queue);
-                    break;
-                }
-                else if (t1 == HitboxType::Circle && t2 == HitboxType::Rectangle) {
-                    reactSquareCircle(*objects[j], *objects[i], spawn_queue);
-                    break;
-                }
+            if (checkIntersection(*obj1, *obj2)) {
+                
+                auto type1 = obj1->getHitboxType();
+                auto type2 = obj2->getHitboxType();
+
+                resolveReaction[static_cast<int>(type1) * 2 + static_cast<int>(type2)](*obj1, *obj2, spawn_queue);
             }
         }
     }

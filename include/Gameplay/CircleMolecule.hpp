@@ -1,8 +1,8 @@
 #ifndef CIRCLE_MOLECULE_HPP
 #define CIRCLE_MOLECULE_HPP
 
-#include "Graphic/Colors.hpp"
 #include "Core/GameObject.hpp"
+#include "Graphic/Colors.hpp"
 #include "Math/Vector.hpp"
 
 namespace Gameplay {

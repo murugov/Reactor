@@ -16,10 +16,11 @@ public:
 
     // -------------------------------------------------------------------------------
     // --- Static Methods Prototypes ---
-    
-    static void resolveCircleCircle (Core::GameObject& obj1, Core::GameObject& obj2);
-    static void resolveSquareSquare (Core::GameObject& obj1, Core::GameObject& obj2);
-    static void resolveSquareCircle (Core::GameObject& obj1, Core::GameObject& obj2);
+
+    static void resolveCircleCircle (Core::GameObject& circle1, Core::GameObject& circle2);
+    static void resolveCircleSquare (Core::GameObject& circle, Core::GameObject& square);
+    static void resolveSquareCircle (Core::GameObject& square, Core::GameObject& circle);
+    static void resolveSquareSquare (Core::GameObject& square1, Core::GameObject& square2);
     
     static void collideObjects (std::vector<std::unique_ptr<GameObject>>& objects);
     static void collideWithWalls (std::vector<std::unique_ptr<GameObject>>& objects, 

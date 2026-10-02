@@ -1,5 +1,5 @@
-#include "UI/Valve.hpp"
 #include "Graphic/Adapter.hpp"
+#include "UI/Valve.hpp"
 
 namespace Gameplay {
 

@@ -3,8 +3,6 @@
 #include "Gameplay/Heater.hpp"
 #include "Gameplay/MolecularContainer.hpp"
 #include "Gameplay/Plot.hpp"
-#include "UI/TemperatureController.hpp"
-#include "UI/Valve.hpp"
 #include "Graphic/Adapter.hpp"
 #include "Graphic/Canvas.hpp"
 #include "Graphic/Camera.hpp"
@@ -12,6 +10,8 @@
 #include "Graphic/SpriteMaterial.hpp"
 #include "Graphic/Texture.hpp"
 #include "Math/Vector.hpp"
+#include "UI/TemperatureController.hpp"
+#include "UI/Valve.hpp"
 
 int main() {
     const int window_width  = 800;
@@ -131,7 +131,7 @@ int main() {
 
         float dt = Graphic::Adapter::getFrameTime(); 
 
-        if (current_fps < 20 && current_fps > 0) {
+        if (current_fps < 10 && current_fps > 0) {
             reactor_melted_down = true;
             raw_vessel_ptr->setEnabled(false);
         }

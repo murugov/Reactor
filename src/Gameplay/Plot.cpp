@@ -6,7 +6,7 @@ namespace Gameplay {
 void Plot::pushValue(float value) {
     data_history_.push_back(value);
     
-    if (data_history_.size() > max_samples_) {
+    if (data_history_.size() >= max_samples_) {
         data_history_.erase(data_history_.begin());
     }
 

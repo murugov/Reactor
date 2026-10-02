@@ -15,11 +15,11 @@ enum class ObjectType {
 };
     
 enum class HitboxType {
-    None,
-    Circle,
-    Rectangle
+    None      = -1,
+    Circle    = 0,
+    Rectangle = 1
 };
-    
+
 class GameObject {
 protected:
     Math::Vector2D pos_;
@@ -66,7 +66,6 @@ public:
 
     virtual ObjectType getObjectType () const = 0;
     virtual HitboxType getHitboxType () const = 0;
-
 };
 
 } // namespace Core

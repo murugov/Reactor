@@ -1,5 +1,5 @@
-#include "UI/TemperatureController.hpp"
 #include "Graphic/Adapter.hpp"
+#include "UI/TemperatureController.hpp"
 
 namespace Gameplay {
 
