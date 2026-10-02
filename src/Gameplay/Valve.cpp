@@ -10,8 +10,13 @@ void Valve::update(float dt) {
     if (Graphic::Adapter::isMouseButtonPressed(1)) { // FIXME: Add button keys
         Math::Vector2D mouse_pos = Graphic::Adapter::getMousePosition();
 
+<<<<<<< HEAD
         float scaled_width  = size_.x();
         float scaled_height = size_.y();
+=======
+        float scaled_width  = size_.x() * scale_;
+        float scaled_height = size_.y() * scale_;
+>>>>>>> 1c2f76a8d19988a9f911ee2d12fce7bfbec2c368
 
         bool hit_x = (mouse_pos.x() >= pos_.x()) && (mouse_pos.x() <= pos_.x() + scaled_width);
         bool hit_y = (mouse_pos.y() >= pos_.y()) && (mouse_pos.y() <= pos_.y() + scaled_height);
